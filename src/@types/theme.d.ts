@@ -15,5 +15,7 @@ declare module '@rneui/themed' {
     info: string;
     white: string;
     black: string;
+    edit: string;
+    delete: string;
   }
 }

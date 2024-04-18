@@ -76,7 +76,7 @@ export default function RegisterClient() {
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10 }}
-            onPress={ () => navigation.navigate('RegisterType' as never)}
+            onPress={ () => navigation.navigate('BarberServices' as never)}
           />
           <Text style={styles.text}>
             Já possui uma conta? <Link style={styles.link} to='/Login'>Faça login</Link>

@@ -5,6 +5,7 @@ import LoginScreen from './screens/Login';
 import RegisterType from './screens/RegisterType';
 import RegisterBarber from './screens/RegisterBarberShop';
 import RegisterClient from './screens/RegisterClient';
+import BarberServices from './screens/BarberServices';
 
 function Navigator() {
   const Stack = createNativeStackNavigator();
@@ -17,6 +18,7 @@ function Navigator() {
         <Stack.Screen name='RegisterType' component={RegisterType} options={{ title: ''}}/>
         <Stack.Screen name='RegisterBarber' component={RegisterBarber} options={{ title: ''}}/>
         <Stack.Screen name='RegisterClient' component={RegisterClient} options={{ title: ''}}/>
+        <Stack.Screen name='BarberServices' component={BarberServices} options={{ title: ''}}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
