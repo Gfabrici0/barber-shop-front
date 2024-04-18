@@ -79,7 +79,7 @@ export default function RegisterClientScreen() {
             onPress={ () => navigation.navigate('BarberServices' as never)}
           />
           <Text style={styles.text}>
-            Já possui uma conta? <Link style={styles.link} to='/Login'>Faça login</Link>
+            Já possui uma conta? <Link style={styles.link} to='/login'>Faça login</Link>
           </Text>
       </SafeAreaView>
     </ImageBackground>
