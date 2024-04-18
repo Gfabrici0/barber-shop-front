@@ -50,7 +50,7 @@ function ForgotPasswordScreen() {
             leftIcon={<Icon name='key' />}
           />        
           <Button
-            title={'Enviar'}
+            title={'Salvar'}
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10 }}
