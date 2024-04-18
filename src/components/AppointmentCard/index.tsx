@@ -1,36 +1,33 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Card, Icon } from '@rneui/base';
+import { View, Text, ScrollView } from 'react-native';
 import { styles } from './styles';
-import { useTheme } from '@rneui/themed';
-import { formatTime } from '../../utils/formatTime';
+import { Icon, useTheme } from '@rneui/themed';
+import servicesData from "./mock/demandData.json"
 
 export interface Appointment {
   time: string;
   clientName: string;
 }
 
-const AppointmentCard = (appointment: Appointment) => {
+const AppointmentCard = () => {
 
   const theme = useTheme();
   
   return (
-    <Card containerStyle={styles.card}>
-      <View style={{...styles.cardContent }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ marginRight: 20 }}>
-            <Text style={{ fontSize: 18, color: theme.theme.colors.primary }}>{formatTime(appointment.time)}</Text>
+    <ScrollView style={styles.scrollView}>
+      {
+        servicesData.appoiments.map((service) => (
+          <View key={service.id} style={styles.card}>
+            <Text style={styles.cardTitle}>{service.hour}</Text>
+            <Text style={styles.cardTitle}>{service.appoiment}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Icon name="edit" color={theme.theme.colors.edit} onPress={() => console.log('Edit Pressed')} />
+              <Icon name="delete" color={theme.theme.colors.delete} onPress={() => console.log('Delete Pressed')} />
+            </View>
           </View>
-          <View >
-            <Text style={{ fontSize: 18, color: theme.theme.colors.primary }}>{appointment.clientName}</Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <Icon name="edit" color={theme.theme.colors.edit} onPress={() => console.log('Edit Pressed')} />
-          <Icon name="delete" color={theme.theme.colors.delete} onPress={() => console.log('Delete Pressed')} />
-        </View>
-      </View>
-    </Card>
+        ))
+      }
+    </ScrollView>
   );
 };
 

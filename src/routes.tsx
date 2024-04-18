@@ -5,10 +5,12 @@ import LoginScreen from './screens/Login';
 import RegisterType from './screens/RegisterType';
 import RegisterBarber from './screens/RegisterBarberShop';
 import RegisterClient from './screens/RegisterClient';
-import HomeScreen from './screens/Home';
+import AppoimentScreen from './screens/Appoiment';
 import { StatusBar } from 'expo-status-bar';
 import BarberServices from './screens/BarberServices';
 import EditProfile from './screens/Profile';
+import Demand from './screens/Demand';
+import Home from './screens/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,8 +27,10 @@ function Navigator() {
           <Stack.Screen name='registerClient' component={RegisterClient} options={{ title: ''}}/>
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true }}>
-          <Stack.Screen name='home' component={HomeScreen} options={{ title: ''}}/>
+          <Stack.Screen name='home' component={Home} options={{ title: ''}}/>
+          <Stack.Screen name='appoiment' component={AppoimentScreen} options={{ title: ''}}/>
           <Stack.Screen name='barberServices' component={BarberServices} options={{ title: ''}}/>
+          <Stack.Screen name='demand' component={Demand} options={{ title: ''}}/>
           <Stack.Screen name='profile' component={EditProfile} options={{ title: ''}}/>
         </Stack.Group>
       </Stack.Navigator>

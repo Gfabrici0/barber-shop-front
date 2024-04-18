@@ -1,24 +1,28 @@
-import { useTheme } from "@rneui/themed";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  cardContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row', 
-    alignItems: 'center',
+  scrollView: {
+    flex: 1
   },
-  card: { 
-    borderRadius: 20,
+  cardTitle: {
+    fontSize: 18,
+    color: '#914111'
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 20,
+    marginVertical: 5,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     shadowColor: "#000",
-    marginHorizontal: 0,
     shadowOffset: {
-      width: 0,
+      width: 2,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    paddingVertical: 20, 
-  }
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 3,
+  },
 })
