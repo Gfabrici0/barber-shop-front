@@ -7,6 +7,7 @@ import RegisterBarber from './screens/RegisterBarberShop';
 import RegisterClient from './screens/RegisterClient';
 import HomeScreen from './screens/Home';
 import { StatusBar } from 'expo-status-bar';
+import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ function Navigator() {
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true }}>
           <Stack.Screen name='home' component={HomeScreen} options={{ title: ''}}/>
-          {/* Adicione outras telas principais aqui */}
+          <Stack.Screen name='profile' component={Profile} options={{ title: ''}}/>
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
