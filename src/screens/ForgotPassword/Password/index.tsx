@@ -10,9 +10,9 @@ import { useTheme } from '@rneui/themed';
 import { Link } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-const image = require('../../../assets/background.png');
+const image = require('../../../../assets/background.png');
 
-function LoginScreen() {
+function ForgotPasswordScreen() {
 
   const navigation = useNavigation()
 
@@ -33,38 +33,35 @@ function LoginScreen() {
       <ImageBackground source={image} resizeMode="cover" style={styles.containerImage}>
         <SafeAreaView style={styles.container}>
           <Text style={styles.title}>
-            Olá! Seja Bem Vindo!
+            Recuperar Senha
           </Text>
           <Input
-            placeholder='Email'
-            inputContainerStyle={styles.input}
-            containerStyle={{paddingHorizontal: 0}}
-            underlineColorAndroid='transparent'
-            leftIcon={<Icon name='email' />}
-          />
-          <Input 
             placeholder='Senha'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
             leftIcon={<Icon name='key' />}
-          />
+          />      
+          <Input
+            placeholder='Confirmar senha'
+            inputContainerStyle={styles.input}
+            containerStyle={{paddingHorizontal: 0}}
+            underlineColorAndroid='transparent'
+            leftIcon={<Icon name='key' />}
+          />        
           <Button
-            title={'Entrar'}
+            title={'Enviar'}
             size='md'
             color={theme.theme.colors.secondary}
-            containerStyle={{ width: '100%', borderRadius: 10, marginTop: 10 }}
-            onPress={ () => navigation.navigate('home' as never)}
+            containerStyle={{ width: '100%', borderRadius: 10 }}
+            onPress={ () => navigation.navigate('login' as never)}
           />
           <Text style={styles.text}>
-            Esqueceu sua senha? <Link style={styles.link} to={'/forgotPasswordInputEmail'}>Recuperar senha</Link>
-          </Text>
-          <Text style={styles.text}>
-            Ainda não tem uma conta? <Link style={styles.link} to={'/registerType'}>Cadastre-se</Link>
+            Já possui uma conta? <Link style={styles.link} to='/login'>Faça login</Link>
           </Text>
         </SafeAreaView>
       </ImageBackground>
   );
 }
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
