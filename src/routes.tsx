@@ -8,6 +8,7 @@ import RegisterClient from './screens/RegisterClient';
 import HomeScreen from './screens/Home';
 import { StatusBar } from 'expo-status-bar';
 import BarberServices from './screens/BarberServices';
+import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
 

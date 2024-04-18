@@ -1,34 +1,54 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { styles } from './style';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import {
   Button,
   Icon
 } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import servicesData from './mock/servicesData.json';
+import { useNavigation } from '@react-navigation/native';
+import { DropdownMenu } from '../../components/DropdownMenu';
 
 function BarberServices() {
 
-  const navigation = useNavigation()
-
+  const navigation = useNavigation();
   const theme = useTheme();
+  const [isMenuVisible, setMenuVisible] = useState(false);
 
-  
-  useEffect(() => {
+  const toggleMenu = () => {
+    setMenuVisible(!isMenuVisible);
+  };
+
+  const handleMenuItemPress = (screen: string) => {
+    navigation.navigate(screen as never);
+    toggleMenu();
+  };
+
+  useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitle: 'Seus serviços',
+      headerRight: () => (
+        <TouchableOpacity onPress={toggleMenu}>
+          <Icon name='menu' color={theme.theme.colors.white} />
+        </TouchableOpacity>
+      ),
       headerStyle: {
-        backgroundColor: 'black'
+        backgroundColor: theme.theme.colors.primary, 
       },
-      headerTintColor: 'white', 
+      headerTintColor: theme.theme.colors.white,
+      headerTitleStyle: {
+        backgroundColor: theme.theme.colors.primary,
+      },
     });
-  })
-
+  }, [navigation, isMenuVisible]);
 
   return (
     <SafeAreaView style={styles.container}>
+      {isMenuVisible && (
+        <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
+      )}
         <Text style={styles.welcomeText}>
             Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
         </Text>

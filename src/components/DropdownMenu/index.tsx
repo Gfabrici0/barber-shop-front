@@ -1,6 +1,6 @@
 import { TouchableOpacity, View, Text} from "react-native";
-import { styles } from "./styles";
 import { useTheme } from "@rneui/themed";
+import { styles } from "./styles";
 
 export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (screen: string) => void }) {
   const theme = useTheme();
@@ -13,7 +13,7 @@ export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (sc
       <TouchableOpacity onPress={() => handleMenuItemPress('profile')}>
         <Text style={styles.menuItem}>Editar perfil</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleMenuItemPress('services')}>
+      <TouchableOpacity onPress={() => handleMenuItemPress('barberServices')}>
         <Text style={styles.menuItem}>Serviços</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleMenuItemPress('sair')}>
