@@ -38,5 +38,6 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: 'gray',
+    marginTop: 10
   }
 })
