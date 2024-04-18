@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const image = require('../../../assets/background.png');
 
-export default function RegisterBarberShop() {
+export default function RegisterBarberShopScreen() {
 
   const navigation = useNavigation()
   const theme = useTheme();
@@ -81,7 +81,7 @@ export default function RegisterBarberShop() {
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10, marginTop: 10 }}
-            onPress={ () => navigation.navigate('BarberServices' as never)}
+            onPress={ () => navigation.navigate('/registerType' as never)}
           />
           <Text style={styles.text}>
             Já tem uma conta? <Link style={styles.link} to='/Login'>Faça login</Link>

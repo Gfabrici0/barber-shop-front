@@ -54,13 +54,13 @@ function LoginScreen() {
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10, marginTop: 10 }}
-            onPress={ () => navigation.navigate('RegisterType' as never)}
+            onPress={ () => navigation.navigate('home' as never)}
           />
-          <Text style={{marginTop: 20}}>
-            Esqueceu sua senha? Recuperar senha
+          <Text style={styles.text}>
+            Esqueceu sua senha? <Text style={styles.link}>Recuperar senha</Text>
           </Text>
-          <Text>
-            Ainda não tem uma conta? Cadastre-se
+          <Text style={styles.text}>
+            Ainda não tem uma conta? <Link style={styles.link} to={'/registerType'}>Cadastre-se</Link>
           </Text>
         </SafeAreaView>
       </ImageBackground>
