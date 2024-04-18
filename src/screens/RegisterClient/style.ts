@@ -6,9 +6,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    gap: 10,
     width: '100%',
+    flex: 1,
     paddingHorizontal: 30,
   },
   containerImage: {
@@ -23,17 +22,17 @@ export const styles = StyleSheet.create({
   },
   contentContaner: {
     display: 'flex', 
-    flexDirection: 'column', 
-    gap: 10, 
+    flexDirection: 'column',
     justifyContent: 'center', 
-    alignItems: 'center' 
- },
+    alignItems: 'center',
+  },
   input: {
     backgroundColor: 'white',
     width: '100%',
     height: 30,
     borderRadius: 10,
     paddingHorizontal: 10,
+    paddingVertical: 18
   },
   link: {
     color: 'white',
@@ -41,6 +40,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: 'gray',
+    paddingTop: 10,
     alignSelf: 'center'
-  }
+  },
 })

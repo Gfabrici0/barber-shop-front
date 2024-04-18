@@ -1,17 +1,17 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { styles } from './style';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import {
   Button,
-  Icon  
+  Icon
 } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import servicesData from './mock/demandData.json';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
-import servicesData from "./mock/demandData.json";
 
-function Home() {
+function Demand() {
 
   const navigation = useNavigation();
   const theme = useTheme();
@@ -28,7 +28,7 @@ function Home() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: 'home',
+      headerTitle: 'Seus pedidos',
       headerRight: () => (
         <TouchableOpacity onPress={toggleMenu}>
           <Icon name='menu' color={theme.theme.colors.white} />
@@ -50,33 +50,32 @@ function Home() {
         <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
       )}
         <Text style={styles.welcomeText}>
-          Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
+            Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
         </Text>
-        <Text style={styles.description}>Buscar barbearia</Text>
-        <View style={[styles.inputContainer, { borderColor: theme.theme.colors.secondary }]}>
-          <TextInput
-            style={{ color: theme.theme.colors.secondary,borderColor: theme.theme.colors.secondary }}
-            placeholderTextColor={theme.theme.colors.secondary}
-          />
-        </View>
-        <Text style={styles.description}>Resultados Encontrados:</Text>
+        <Text style={styles.description}>
+            Esta é a sua lista de pedidos {'\n'}de agendamentos
+        </Text>
+        <Text style={styles.title}>Lista de Pedidos</Text>
         <ScrollView style={styles.scrollView}>
-          {
-            servicesData.barbershop.map((service) => (
-              <View key={service.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{service.barbershopName}</Text>
-              </View>
-            ))
-          }
+        {servicesData.cards.map((service) => (
+            <View key={service.id} style={styles.card}>
+                <Text style={styles.cardTitle}>{service.date}</Text>
+                <Text style={styles.cardTitle}>{service.clientName}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Icon name="check" color={theme.theme.colors.check} onPress={() => console.log('Edit Pressed')} />
+                    <Icon name="close" color={theme.theme.colors.close} onPress={() => console.log('Delete Pressed')} />
+                </View>
+            </View>
+        ))}
         </ScrollView>
         <Button
-          title="Agendar" 
-          size="md"
-          color={theme.theme.colors.secondary}
-          containerStyle={styles.button}
+        title="Cadastrar novo serviço"
+        size="md"
+        color={theme.theme.colors.secondary}
+        containerStyle={styles.button}
         />
     </SafeAreaView>
   );
 }
 
-export default Home;
+export default Demand;

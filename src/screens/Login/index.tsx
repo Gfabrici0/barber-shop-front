@@ -6,7 +6,7 @@ import {
   Icon, 
   Button
 } from '@rneui/base';
-import { Header, useTheme } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
 import { Link } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';

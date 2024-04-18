@@ -1,0 +1,37 @@
+{
+  "profileName": "Matheus Teixeira",
+  "barbershop": [
+    {
+      "id": 1,    
+      "barbershopName": "Barbearia do Luiz"
+    },
+    {
+      "id": 2,    
+      "barbershopName": "Barbershop"
+    },
+    {
+      "id": 3,    
+      "barbershopName": "Mr. Barbudo Barber Shop"
+    },
+    {
+      "id": 4,    
+      "barbershopName": "Rodrigu' S Barbearia"
+    },
+    {
+      "id": 5,    
+      "barbershopName": "Barbearia do Luiz"
+    },
+    {
+      "id": 6,    
+      "barbershopName": "Barbershop"
+    },
+    {
+      "id": 7,    
+      "barbershopName": "Mr. Barbudo Barber Shop"
+    },
+    {
+      "id": 8,    
+      "barbershopName": "Rodrigu' S Barbearia"
+    }
+  ]
+}

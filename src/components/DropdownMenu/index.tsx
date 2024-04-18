@@ -7,7 +7,7 @@ export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (sc
 
   return (
     <View style={[styles.dropdownMenu, { backgroundColor: theme.theme.colors.secondary }]}>
-      <TouchableOpacity onPress={() => handleMenuItemPress('agendamentos')}>
+      <TouchableOpacity onPress={() => handleMenuItemPress('appoiment')}>
         <Text style={styles.menuItem}>Agendamentos</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleMenuItemPress('profile')}>
@@ -16,7 +16,10 @@ export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (sc
       <TouchableOpacity onPress={() => handleMenuItemPress('barberServices')}>
         <Text style={styles.menuItem}>Serviços</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleMenuItemPress('sair')}>
+      <TouchableOpacity onPress={() => handleMenuItemPress('demand')}>
+        <Text style={styles.menuItem}>Pedidos</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleMenuItemPress('login')}>
         <Text style={styles.menuItem}>Sair</Text>
       </TouchableOpacity>
     </View>

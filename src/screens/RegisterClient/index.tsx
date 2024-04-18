@@ -6,7 +6,6 @@ import { useTheme } from '@rneui/themed';
 import { Link, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './style';
-import { StatusBar } from 'expo-status-bar';
 
 const image = require('../../../assets/background.png');
 
@@ -33,6 +32,7 @@ export default function RegisterClientScreen() {
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='user' type='font-awesome' />}
           />
 
           <Input 
@@ -40,36 +40,42 @@ export default function RegisterClientScreen() {
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='badge'/>}
           />
           <Input
             placeholder='Insira seu email'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='email' />}
           />
           <Input
             placeholder='Data de nascimento'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='date-range' />}
           />
           <Input
             placeholder='Número do celular'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='phone' />}
           />
           <Input
             placeholder='Crie uma senha'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='key' />}
           />
           <Input
             placeholder='Confimar senha'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='key' />}
           />
           <Button
             title={'Cadastrar'}

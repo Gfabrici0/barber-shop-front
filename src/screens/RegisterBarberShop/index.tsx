@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { ImageBackground, ScrollView, Text, View } from 'react-native'
+import { ImageBackground, Text } from 'react-native'
 import { styles } from './styles';
 import { Button, Icon, Input } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
@@ -32,6 +32,7 @@ export default function RegisterBarberShopScreen() {
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='user' type='font-awesome' />}
           />
 
           <Input 
@@ -39,42 +40,49 @@ export default function RegisterBarberShopScreen() {
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='badge'/>}
           />
           <Input
             placeholder='Insira seu email'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='email' />}
           />
           <Input
             placeholder='Cidade'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='home' />}
           />
           <Input
             placeholder='Rua'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='home' />}
           />
           <Input
             placeholder='CEP'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='home' />}
           />
           <Input
             placeholder='Número'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='home' />}
           />
           <Input
             placeholder='Número de celular'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
             underlineColorAndroid='transparent'
+            leftIcon={<Icon name='phone' />}
           />
           <Button
             title={'Cadastrar'}

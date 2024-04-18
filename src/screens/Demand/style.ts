@@ -21,16 +21,8 @@ export const styles = StyleSheet.create({
   },
   description: {
     color: '#914111',
-    marginTop: 20,
+    marginTop: 5,
     fontSize: 15,
-  },
-  inputContainer: {
-    borderWidth: 1.3,
-    borderRadius: 20,
-    justifyContent: 'center',
-    height: 40,
-    marginBottom: 10,
-    padding: 10,
   },
   scrollView: {
     flex: 1
