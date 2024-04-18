@@ -11,6 +11,8 @@ import BarberServices from './screens/BarberServices';
 import EditProfile from './screens/Profile';
 import Demand from './screens/Demand';
 import Home from './screens/Home';
+import ForgotPasswordInputEmailScreen from './screens/ForgotPassword/Email';
+import ForgotPasswordScreen from './screens/ForgotPassword/Password';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +27,8 @@ function Navigator() {
           <Stack.Screen name='registerType' component={RegisterType} options={{ title: ''}}/>
           <Stack.Screen name='registerBarber' component={RegisterBarber} options={{ title: ''}}/>
           <Stack.Screen name='registerClient' component={RegisterClient} options={{ title: ''}}/>
+          <Stack.Screen name='forgotPasswordInputEmail' component={ForgotPasswordInputEmailScreen} options={{ title: ''}}/>
+          <Stack.Screen name='forgotPassword' component={ForgotPasswordScreen} options={{ title: ''}}/>
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true }}>
           <Stack.Screen name='home' component={Home} options={{ title: ''}}/>
