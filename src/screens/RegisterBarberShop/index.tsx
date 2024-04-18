@@ -84,7 +84,7 @@ export default function RegisterBarberShopScreen() {
             onPress={ () => navigation.navigate('/registerType' as never)}
           />
           <Text style={styles.text}>
-            Já tem uma conta? <Link style={styles.link} to='/Login'>Faça login</Link>
+            Já tem uma conta? <Link style={styles.link} to='/login'>Faça login</Link>
           </Text>
       </SafeAreaView>
     </ImageBackground>
