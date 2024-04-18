@@ -1,4 +1,3 @@
-import { useTheme } from "@rneui/themed";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -13,7 +12,7 @@ export const styles = StyleSheet.create({
   calendarContainer: {
     marginTop: 20,
   },
-  secondTitle: {
+  subtitle: {
     fontSize: 20,
     marginTop: 10,
     marginBottom: 10,
@@ -23,4 +22,5 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
+
 })

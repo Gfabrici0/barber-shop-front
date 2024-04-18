@@ -1,16 +1,18 @@
-import React, { useLayoutEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useLayoutEffect, useState, useRef } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, useTheme } from '@rneui/themed';
 import { styles } from './style';
 import { Calendar } from 'react-native-calendars';
 import AppointmentCard from '../../components/AppointmentCard';
+import { DropdownMenu } from '../../components/DropdownMenu';
 
 function HomeScreen() {
 
   const navigation = useNavigation();
   const theme = useTheme();
-  
+  const [isMenuVisible, setMenuVisible] = useState(false);
+
   const appointmentsRegisters = 
   [
     { time: '08:00', clientName: 'João' },
@@ -23,6 +25,15 @@ function HomeScreen() {
     { date: '2024-04-15' },
   ];
 
+  const toggleMenu = () => {
+    setMenuVisible(!isMenuVisible);
+  };
+
+  const handleMenuItemPress = (screen: string) => {
+    navigation.navigate(screen as never);
+    toggleMenu();
+  };
+
   const markedDates = appointments.reduce<{ [key: string]: { selected: true, marked: true } }>((acc, appointment) => {
     acc[appointment.date] = { selected: true, marked: true };
     return acc;
@@ -32,7 +43,9 @@ function HomeScreen() {
     navigation.setOptions({
       headerTitle: 'Seus agendamentos',
       headerRight: () => (
-        <Icon name='menu' color={theme.theme.colors.white}/>
+        <TouchableOpacity onPress={toggleMenu}>
+          <Icon name='menu' color={theme.theme.colors.white} />
+        </TouchableOpacity>
       ),
       headerStyle: {
         backgroundColor: theme.theme.colors.primary, 
@@ -42,34 +55,41 @@ function HomeScreen() {
         backgroundColor: theme.theme.colors.primary,
       },
     });
-  }, [navigation]);
+  }, [navigation, isMenuVisible]);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={[styles.title, {color: theme.theme.colors.primary}]}>
-          Bem vindo, <Text style={{fontWeight: 'bold'}}>Mateus Teixeira</Text>
-      </Text>
-      <Text style={[{color: theme.theme.colors.primary}]}>Esta é a sua lista de horários de hoje, dia 10/04/2024</Text>
-      <View style={styles.calendarContainer}>
-        <Calendar 
-          markedDates={markedDates} 
-          theme={{
-            selectedDayBackgroundColor: theme.theme.colors.primary,
-            todayTextColor: theme.theme.colors.primary,
-            arrowColor: theme.theme.colors.primary,
-            monthTextColor: theme.theme.colors.primary,
-            dayTextColor: theme.theme.colors.primary,
-            agendaDayTextColor: theme.theme.colors.primary,
-          }}  
-        />
-      </View>
+    <SafeAreaView style={styles.container}>
+      {isMenuVisible && (
+        <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
+      )}
+      <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 30}}>
+        <Text style={[styles.title, {color: theme.theme.colors.primary}]}>
+            Bem vindo, <Text style={{fontWeight: 'bold'}}>Mateus Teixeira</Text>
+        </Text>
+        <Text style={[{color: theme.theme.colors.primary}]}>Esta é a sua lista de horários de hoje, dia 10/04/2024</Text>
+        <View style={styles.calendarContainer}>
+          <Calendar 
+            markedDates={markedDates} 
+            theme={{
+              selectedDayBackgroundColor: theme.theme.colors.primary,
+              todayTextColor: theme.theme.colors.primary,
+              arrowColor: theme.theme.colors.primary,
+              monthTextColor: theme.theme.colors.primary,
+              dayTextColor: theme.theme.colors.primary,
+              agendaDayTextColor: theme.theme.colors.primary,
+            }}  
+          />
+        </View>
 
-      <Text style={[styles.secondTitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>
-      {appointmentsRegisters.map((appointment, index) => (
-        <AppointmentCard key={index} {...appointment} />
-      ))}
-    </ScrollView>
+        <Text style={[styles.subtitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>
+        {appointmentsRegisters.map((appointment, index) => (
+          <AppointmentCard key={index} {...appointment} />
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+
 
 export default HomeScreen;

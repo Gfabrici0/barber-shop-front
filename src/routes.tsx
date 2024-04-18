@@ -26,7 +26,7 @@ function Navigator() {
         <Stack.Group screenOptions={{ headerShown: true }}>
           <Stack.Screen name='home' component={HomeScreen} options={{ title: ''}}/>
           <Stack.Screen name='barberServices' component={BarberServices} options={{ title: ''}}/>
-          {/* Adicione outras telas principais aqui */}
+          <Stack.Screen name='profile' component={Profile} options={{ title: ''}}/>
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
