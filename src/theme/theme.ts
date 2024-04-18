@@ -15,5 +15,7 @@ export const theme = createTheme({
     info: '#0000FF',
     white: '#FFFFFF',
     black: '#000000',
+    edit: '#5F68B1',
+    delete: '#EB2E2E',
   },
 })

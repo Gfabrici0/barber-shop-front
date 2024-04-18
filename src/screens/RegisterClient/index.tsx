@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 
 const image = require('../../../assets/background.png');
 
-export default function RegisterClient() {
+export default function RegisterClientScreen() {
 
   const navigation = useNavigation()
   const theme = useTheme();

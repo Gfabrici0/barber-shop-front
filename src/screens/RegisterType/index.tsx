@@ -30,14 +30,14 @@ export default function RegisterTypeScreen() {
           <Button
             title='Cadastrar Barbearia'
             size='md'
-            onPress={ () => navigation.navigate('RegisterBarber' as never)}
+            onPress={ () => navigation.navigate('registerBarber' as never)}
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 20, marginTop: 10}}
           />
           <Button
             title='Cadastrar Cliente'
             size='md'
-            onPress={ () => navigation.navigate('RegisterClient' as never)}
+            onPress={ () => navigation.navigate('registerClient' as never)}
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 20, marginTop: 10}}
           />
