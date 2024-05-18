@@ -10,12 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import servicesData from "./mock/demandData.json";
+import ScheduleModal from '../../modals/scheduleModal';
 
 function Home() {
 
   const navigation = useNavigation();
   const theme = useTheme();
   const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isScheduleModalVisible, setScheduleModalVisible] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -24,6 +26,14 @@ function Home() {
   const handleMenuItemPress = (screen: string) => {
     navigation.navigate(screen as never);
     toggleMenu();
+  };
+
+  const handleSchedule = () => {
+    toggleScheduleModal();
+  };
+
+  const toggleScheduleModal = () => {
+    setScheduleModalVisible(!isScheduleModalVisible);
   };
 
   useLayoutEffect(() => {
@@ -74,6 +84,12 @@ function Home() {
           size="md"
           color={theme.theme.colors.secondary}
           containerStyle={styles.button}
+          onPress={toggleScheduleModal}
+        />
+        <ScheduleModal
+          visible={isScheduleModalVisible}
+          onCancel={toggleScheduleModal}
+          onSchedule={handleSchedule}
         />
     </SafeAreaView>
   );

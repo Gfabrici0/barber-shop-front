@@ -82,7 +82,7 @@ export default function RegisterClientScreen() {
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10 }}
-            onPress={ () => navigation.navigate('RegisterType' as never)}
+            onPress={ () => navigation.navigate('login' as never)}
           />
           <Text style={styles.text}>
             Já possui uma conta? <Link style={styles.link} to='/login'>Faça login</Link>

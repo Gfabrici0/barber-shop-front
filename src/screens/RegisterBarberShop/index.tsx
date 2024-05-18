@@ -89,7 +89,7 @@ export default function RegisterBarberShopScreen() {
             size='md'
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 10, marginTop: 10 }}
-            onPress={ () => navigation.navigate('/registerType' as never)}
+            onPress={ () => navigation.navigate('login' as never)}
           />
           <Text style={styles.text}>
             Já tem uma conta? <Link style={styles.link} to='/login'>Faça login</Link>
