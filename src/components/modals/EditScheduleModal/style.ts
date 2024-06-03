@@ -17,6 +17,16 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
+  appointmentInfo: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  textInput: {
+    flex: 1,
+    marginLeft: 5,
+    padding: 5,
+  },
   modalContainer: {
     width: '90%',
     backgroundColor: 'white',
@@ -36,37 +46,33 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   inputGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 15,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',    
-  },
   inputContainer: {
-    flex: 1,
-    marginHorizontal: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: '#8B5B35',
+    borderWidth: 2,
+    padding: 5,
+    width: '50%',
   },
   label: {
     color: '#8B5B35',
     fontWeight: 'bold',
     marginBottom: 5,
-  },
-  select: {
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#8B5B35',
-    backgroundColor: '#FFF',
-  },
-  picker: {
-    width: '100%',
-    height: 50,
+    width: '45%',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     height: 50,
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     marginTop: 10,
   },
   buttonCancel: {
@@ -78,6 +84,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 8,
     alignItems: 'center',
+    marginRight: 10,
   },
   buttonSchedule: {
     flex: 1,

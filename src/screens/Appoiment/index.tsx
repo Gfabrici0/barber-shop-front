@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Icon, useTheme } from '@rneui/themed';
 import { styles } from './style';
 import { Calendar } from 'react-native-calendars';
-import AppointmentCard from '../../components/AppointmentCard';
+import AppointmentSection from '../../components/AppointmentCard';
 import { DropdownMenu } from '../../components/DropdownMenu';
 
 function AppoimentScreen() {
@@ -74,7 +74,7 @@ function AppoimentScreen() {
         </View>
 
         <Text style={[styles.subtitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>
-        <AppointmentCard/>
+        <AppointmentSection/>
     </SafeAreaView>
   );
 }
