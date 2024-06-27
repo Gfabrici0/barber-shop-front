@@ -76,5 +76,9 @@ export const styles = StyleSheet.create({
     marginTop: 1,
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
+  selectedCard: {
+    backgroundColor: '#914111',
+    color: '#fff'
+  },
 })

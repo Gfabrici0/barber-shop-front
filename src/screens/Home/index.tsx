@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { styles } from './style';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import {
@@ -11,6 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import servicesData from "./mock/demandData.json";
 import ScheduleModal from '../../modals/scheduleModal';
+import { barbershopService } from '../../services/BarbershopService';
+import { Barbershop, Content } from '../../services/interface/barbershop.interface';
+import UserStore from '../../services/Store/UserStore';
 
 function Home() {
 
@@ -22,6 +25,21 @@ function Home() {
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
+
+  const [barbershops, setBarbershops] = useState<Content[]>([]);
+
+  const fetchBarbershops = async () => {
+    try {
+      const response = await barbershopService.listBarbershops();
+      setBarbershops(response.content);
+    } catch (error) {
+      console.error('Erro ao buscar barbearias:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBarbershops();
+  }, []);
 
   const handleMenuItemPress = (screen: string) => {
     navigation.navigate(screen as never);
@@ -35,6 +53,21 @@ function Home() {
   const toggleScheduleModal = () => {
     setScheduleModalVisible(!isScheduleModalVisible);
   };
+
+  const [name, setName] = useState<string | null>(null);
+        
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const name = await UserStore.getName();
+        setName(name);
+      } catch (error) {
+        console.error('Error fetching name:', error);
+      }
+    };
+  
+    fetchName();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,7 +93,7 @@ function Home() {
         <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
       )}
         <Text style={styles.welcomeText}>
-          Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
+          Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{name}</Text>
         </Text>
         <Text style={styles.description}>Buscar barbearia</Text>
         <View style={[styles.inputContainer, { borderColor: theme.theme.colors.secondary }]}>
@@ -72,9 +105,9 @@ function Home() {
         <Text style={styles.description}>Resultados Encontrados:</Text>
         <ScrollView style={styles.scrollView}>
           {
-            servicesData.barbershop.map((service) => (
-              <View key={service.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{service.barbershopName}</Text>
+            barbershops.map((barbershop) => (
+              <View key={barbershop.id} style={styles.card}>
+                <Text style={styles.cardTitle}>{barbershop.tradeName}</Text>
               </View>
             ))
           }

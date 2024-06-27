@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { styles } from './style';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import {
@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import servicesData from './mock/demandData.json';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
+import UserStore from '../../services/Store/UserStore';
 
 function Demand() {
 
@@ -25,6 +26,21 @@ function Demand() {
     navigation.navigate(screen as never);
     toggleMenu();
   };
+
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const name = await UserStore.getName();
+        setName(name);
+      } catch (error) {
+        console.error('Error fetching name:', error);
+      }
+    };
+  
+    fetchName();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -50,7 +66,7 @@ function Demand() {
         <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
       )}
         <Text style={styles.welcomeText}>
-            Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
+            Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{name}</Text>
         </Text>
         <Text style={styles.description}>
             Esta é a sua lista de pedidos {'\n'}de agendamentos

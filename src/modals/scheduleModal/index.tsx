@@ -4,6 +4,7 @@ import { styles } from "./style";
 import { Picker } from "@react-native-picker/picker";
 import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
+import { Content } from "../../services/interface/barbershop.interface";
 
 interface ScheduleModalProps {
   visible: boolean;
