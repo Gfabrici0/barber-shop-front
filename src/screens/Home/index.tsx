@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import servicesData from "./mock/demandData.json";
-import ScheduleModal from '../../modals/scheduleModal';
+import ScheduleModal from '../../components/modals/ScheduleModal';
 import { barbershopService } from '../../services/BarbershopService';
 import { Barbershop, Content } from '../../services/interface/barbershop.interface';
 import UserStore from '../../services/Store/UserStore';
