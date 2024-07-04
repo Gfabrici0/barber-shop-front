@@ -7,7 +7,6 @@ import {
 } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import servicesData from './mock/servicesData.json';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import UserStore from '../../services/Store/UserStore';
@@ -34,6 +33,7 @@ function BarberServices() {
   const fetchServices = async () => {
     try {
       const barber = await barberServicesService.getBarberByEmail();
+      console.log('barber id', barber.id)
       const response = await barberServicesService.listServices(barber.id);
       console.log("response services: ", response)
       setServices(response.content);

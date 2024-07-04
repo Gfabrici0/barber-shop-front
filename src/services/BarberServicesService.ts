@@ -1,20 +1,25 @@
 import axios from "axios";
-import { Barbershop } from "./interface/barbershop.interface";
 import AuthToken from "./Store/AuthToken";
 import UserStore from "./Store/UserStore";
+import Constants from 'expo-constants';
 
 export const barberServicesService = {
 
     async getBarberByEmail(): Promise<any> {
         try {
+            console.log('getBarberByEmail')
             const token = await AuthToken.getToken();
+            console.log('token', token)
             const email = await UserStore.getEmail();
-            const response = await axios.get(`http://192.168.57.158:8080/barber/email/${email}`, {
+            console.log('email', email)
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            const response = await axios.get(`${baseUrl}/barber/email/${email}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
+            console.log('response', response)
             return response.data;
         } catch (error) {
             console.error("Erro ao buscar barbeiro:", error);
@@ -24,7 +29,8 @@ export const barberServicesService = {
     async listServices(id: string): Promise<any> {
         try {
         const token = await AuthToken.getToken();
-        const response = await axios.get(`http://192.168.57.158:8080/barber/service/barber/${id}`, {
+        const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+        const response = await axios.get(`${baseUrl}/barber/service/barber/${id}`, {
             headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -40,7 +46,8 @@ export const barberServicesService = {
     async deleteService(id: string): Promise<any> {
         try {
             const token = await AuthToken.getToken();
-            const response = await axios.delete(`http://192.168.57.158:8080/barbershop/service/${id}`, {
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            const response = await axios.delete(`${baseUrl}/barbershop/service/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

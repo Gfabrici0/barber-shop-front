@@ -21,25 +21,28 @@ function Home() {
   const theme = useTheme();
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isScheduleModalVisible, setScheduleModalVisible] = useState(false);
+  const [selectedBarberShopId, setSelectedBarberShopId] = useState<string>();
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
 
+  const [searchBarbershops, setSearchBarbershops] = useState<string>('');
   const [barbershops, setBarbershops] = useState<Content[]>([]);
 
-  const fetchBarbershops = async () => {
+  const fetchBarbershops = async (currentText: string) => {
     try {
+      console.log(currentText)
       const response = await barbershopService.listBarbershops();
-      setBarbershops(response.content);
+      setBarbershops(response.content ?? []);
     } catch (error) {
       console.error('Erro ao buscar barbearias:', error);
     }
   };
 
   useEffect(() => {
-    fetchBarbershops();
-  }, []);
+    fetchBarbershops(searchBarbershops);
+  }, [searchBarbershops]);
 
   const handleMenuItemPress = (screen: string) => {
     navigation.navigate(screen as never);
@@ -100,13 +103,14 @@ function Home() {
           <TextInput
             style={{ color: theme.theme.colors.secondary,borderColor: theme.theme.colors.secondary }}
             placeholderTextColor={theme.theme.colors.secondary}
+            onEndEditing={(e) => setSearchBarbershops(e.nativeEvent.text)}
           />
         </View>
         <Text style={styles.description}>Resultados Encontrados:</Text>
         <ScrollView style={styles.scrollView}>
           {
             barbershops.map((barbershop) => (
-              <View key={barbershop.id} style={styles.card}>
+              <View key={barbershop.id} style={{...styles.card, backgroundColor: barbershop.id === selectedBarberShopId ? 'grey' : undefined}} onTouchEnd={() => setSelectedBarberShopId(barbershop.id)}>
                 <Text style={styles.cardTitle}>{barbershop.tradeName}</Text>
               </View>
             ))
@@ -119,11 +123,15 @@ function Home() {
           containerStyle={styles.button}
           onPress={toggleScheduleModal}
         />
-        <ScheduleModal
-          visible={isScheduleModalVisible}
-          onCancel={toggleScheduleModal}
-          onSchedule={handleSchedule}
-        />
+        {
+          selectedBarberShopId && (
+            <ScheduleModal
+              visible={isScheduleModalVisible}
+              onCancel={toggleScheduleModal}
+              barberShopId={selectedBarberShopId}
+            />
+          )
+        }
     </SafeAreaView>
   );
 }

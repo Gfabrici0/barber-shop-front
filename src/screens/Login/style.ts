@@ -27,10 +27,9 @@ export const styles = StyleSheet.create({
   input: {
     backgroundColor: 'white',
     width: '100%',
-    height: 30,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 18
+    paddingVertical: 5
   },
   link: {
     color: 'white',

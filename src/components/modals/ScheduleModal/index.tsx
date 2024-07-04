@@ -4,17 +4,19 @@ import { styles } from "./style";
 import { Picker } from "@react-native-picker/picker";
 import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
+import { appointmentService } from '../../../services/AppointmentService'
+import UserStore from "../../../services/Store/UserStore";
 
 interface ScheduleModalProps {
   visible: boolean;
   onCancel: () => void;
-  onSchedule: () => void;
+  barberShopId: string;
 }
 
 const ScheduleModal = ({
+  barberShopId,
   visible,
   onCancel,
-  onSchedule,
 }: ScheduleModalProps) => {
   const [selectedBarber, setSelectedBarber] = useState("");
   const [selectedService, setSelectedService] = useState("");
@@ -24,13 +26,13 @@ const ScheduleModal = ({
   const theme = useTheme();
 
   const barbers = [
-    { id: 1, name: "Mateus Teixeira" },
-    { id: 2, name: "Barbeiro B" },
-    { id: 3, name: "Barbeiro C" },
+    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Mateus Teixeira" },
+    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro B" },
+    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro C" },
   ];
   const services = [
-    { id: 1, name: "Corte Americano - R$ 25,00" },
-    { id: 2, name: "Corte Clássico - R$ 30,00" },
+    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Americano - R$ 25,00" },
+    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Clássico - R$ 30,00" },
   ];
 
   const dates = [
@@ -50,6 +52,23 @@ const ScheduleModal = ({
   };
 
   const hours = generateHours();
+
+  const handleSubmit = async () => {
+    const userId = await UserStore.getId() || '';
+    const date = new Date(selectedDate);
+    console.log('selectedTime', selectedTime)
+    date.setHours(Number(selectedTime.slice(0, 2)));
+    const newAppointment = {
+      barberId: selectedBarber,
+      barbershopId: barberShopId,
+      date,
+      serviceId: selectedService,
+      userId,
+    }
+    console.log('newAppointment', newAppointment)
+    await appointmentService.createAppointment(newAppointment)
+    onCancel();
+  }
 
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
@@ -88,7 +107,7 @@ const ScheduleModal = ({
                         <Picker.Item
                           key={barber.id}
                           label={barber.name}
-                          value={barber.name}
+                          value={barber.id}
                         />
                       ))}
                     </Picker>
@@ -109,7 +128,7 @@ const ScheduleModal = ({
                           key={service.id}
                           label={service.name}
                           style={{backgroundColor: theme.theme.colors.secondary}}
-                          value={service.name}
+                          value={service.id}
                         />
                       ))}
                     </Picker>
@@ -167,7 +186,7 @@ const ScheduleModal = ({
                   title="Agendar"
                   buttonStyle={styles.buttonSchedule}
                   titleStyle={styles.buttonScheduleText}
-                  onPress={onSchedule}
+                  onPress={handleSubmit}
                 />
               </View>
             </View>

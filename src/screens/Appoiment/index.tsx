@@ -58,6 +58,8 @@ function AppoimentScreen() {
     fetchName();
   }, []);
 
+  const updateAppointments = () => fetchAppointments();
+
   const markedDates = appointments.reduce<{ [key: string]: { selected: true, marked: true } }>((acc, appointment) => {
     acc[appointment.date] = { selected: true, marked: true };
     return acc;
@@ -105,7 +107,7 @@ function AppoimentScreen() {
         </View>
 
         <Text style={[styles.subtitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>
-        <AppointmentSection/>
+        <AppointmentSection refreshAppointments={updateAppointments} appointments={appointment} />
     </SafeAreaView>
   );
 }
