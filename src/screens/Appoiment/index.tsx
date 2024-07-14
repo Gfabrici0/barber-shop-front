@@ -30,7 +30,6 @@ function AppoimentScreen() {
     try {
       const userId = await UserStore.getId() ?? '';
       const response = await appointmentService.fetchAppointmentByUserId(userId);
-      console.log("response appointments: ", response)
       setAppointment(response.content);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
@@ -111,7 +110,5 @@ function AppoimentScreen() {
     </SafeAreaView>
   );
 }
-
-
 
 export default AppoimentScreen;

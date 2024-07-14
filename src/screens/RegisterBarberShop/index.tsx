@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { ImageBackground, ScrollView, Text, TextInput, View } from 'react-native'
+import { ImageBackground, ScrollView, Text, View } from 'react-native'
 import { styles } from './styles';
 import { Button, Icon, Input } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
@@ -8,7 +8,6 @@ import { Link, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { barbershopService } from '../../services/BarbershopService';
 import { TextInputMask } from 'react-native-masked-text';
-import { format } from 'date-fns';
 import { handleTextChange, isValidCNPJ, removeFormatting } from '../../utils/formData.utils';
 
 const image = require('../../../assets/background.png');

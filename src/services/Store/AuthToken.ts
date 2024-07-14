@@ -21,7 +21,6 @@ class AuthToken {
     static async deleteToken() {
         try {
             await SecureStore.deleteItemAsync('auth_token');
-            console.log('Token deleted successfully');
         } catch (error) {
             console.error('Failed to delete the token', error);
         }

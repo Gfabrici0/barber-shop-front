@@ -6,7 +6,6 @@ class UserStore {
         try {
             const jsonData = JSON.stringify(data);
             await SecureStore.setItemAsync('user_data', jsonData);
-            console.log('User data stored successfully');
         } catch (error) {
             console.error('Failed to store user data', error);
         }
@@ -32,14 +31,13 @@ class UserStore {
         return userData ? userData.username : null;
     }
 
-    static async getDocumento(): Promise<string | null> {
+    static async getDocument(): Promise<string | null> {
         const userData = await this.getUserData();
         return userData ? userData.document : null;
     }
 
     static async getId(): Promise<string | null> {
         const userData = await this.getUserData();
-        console.log('userData:', userData);
         return userData ? userData.id : null;
     }
 
@@ -51,7 +49,6 @@ class UserStore {
     static async deleteUserData() {
         try {
             await SecureStore.deleteItemAsync('user_data');
-            console.log('User data deleted successfully');
         } catch (error) {
             console.error('Failed to delete user data', error);
         }

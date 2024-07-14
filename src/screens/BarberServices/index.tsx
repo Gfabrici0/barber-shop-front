@@ -33,9 +33,7 @@ function BarberServices() {
   const fetchServices = async () => {
     try {
       const barber = await barberServicesService.getBarberByEmail();
-      console.log('barber id', barber.id)
       const response = await barberServicesService.listServices(barber.id);
-      console.log("response services: ", response)
       setServices(response.content);
     } catch (error) {
       console.error('Erro ao buscar serviços:', error);

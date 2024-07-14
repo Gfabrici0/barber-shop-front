@@ -56,7 +56,6 @@ const ScheduleModal = ({
   const handleSubmit = async () => {
     const userId = await UserStore.getId() || '';
     const date = new Date(selectedDate);
-    console.log('selectedTime', selectedTime)
     date.setHours(Number(selectedTime.slice(0, 2)));
     const newAppointment = {
       barberId: selectedBarber,
@@ -65,7 +64,6 @@ const ScheduleModal = ({
       serviceId: selectedService,
       userId,
     }
-    console.log('newAppointment', newAppointment)
     await appointmentService.createAppointment(newAppointment)
     onCancel();
   }

@@ -23,7 +23,8 @@ export const UserService = {
     
     const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
     try {
-      const response = await axios.post(`${baseUrl}/user`, fixedData);
+      /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
+      const response = await axios.post(`http://192.168.3.16:8080/user`, fixedData);
       return response.data;
     } catch (exc: any) {
       console.error('Error details:', {

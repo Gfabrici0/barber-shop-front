@@ -4,7 +4,7 @@ import { ImageBackground, Text, View } from 'react-native'
 import { styles } from './styles';
 import { Button } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
-import { Link, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const image = require('../../../assets/background.png');
 
@@ -30,7 +30,7 @@ export default function RegisterTypeScreen() {
           <Button
             title='Cadastrar Barbearia'
             size='md'
-            onPress={ () => navigation.navigate('registerBarber' as never)}
+            onPress={ () => navigation.navigate('registerBarbershop' as never)}
             color={theme.theme.colors.secondary}
             containerStyle={{ width: '100%', borderRadius: 20, marginTop: 10}}
           />

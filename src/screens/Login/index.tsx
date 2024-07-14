@@ -14,6 +14,7 @@ import axios from 'axios';
 import AuthToken from '../../services/Store/AuthToken';
 import UserStore from '../../services/Store/UserStore';
 import Config from 'react-native-config';
+import Constants from 'expo-constants';
 const image = require('../../../assets/background.png');
 
 function LoginScreen() {
@@ -25,7 +26,6 @@ function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  
   useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -37,7 +37,8 @@ function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${Config.BASE_URL}/login`, {
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+      const response = await axios.post(`http://192.168.3.16:8080/login`, {
         email,
         password
       }, {

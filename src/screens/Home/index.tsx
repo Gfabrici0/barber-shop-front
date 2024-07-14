@@ -32,7 +32,6 @@ function Home() {
 
   const fetchBarbershops = async (currentText: string) => {
     try {
-      console.log(currentText)
       const response = await barbershopService.listBarbershops();
       setBarbershops(response.content ?? []);
     } catch (error) {
@@ -110,7 +109,7 @@ function Home() {
         <ScrollView style={styles.scrollView}>
           {
             barbershops.map((barbershop) => (
-              <View key={barbershop.id} style={{...styles.card, backgroundColor: barbershop.id === selectedBarberShopId ? 'grey' : undefined}} onTouchEnd={() => setSelectedBarberShopId(barbershop.id)}>
+              <View key={barbershop.id} style={{...styles.card, backgroundColor: barbershop.id === selectedBarberShopId ? 'grey' : '#fff'}} onTouchEnd={() => setSelectedBarberShopId(barbershop.id)}>
                 <Text style={styles.cardTitle}>{barbershop.tradeName}</Text>
               </View>
             ))

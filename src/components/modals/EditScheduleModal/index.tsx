@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, Platform } from "react-native";
+import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { styles } from "./style";
 import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 interface ScheduleModalProps {

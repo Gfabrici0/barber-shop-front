@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react'
-
-import { ImageBackground, Text } from 'react-native'
-import { Button, Icon, Input } from '@rneui/base';
-import { useTheme } from '@rneui/themed';
-import { Link, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ImageBackground, SafeAreaView } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { handleTextChange, isValidCPF, removeFormatting } from "../../utils/formData.utils";
+import { UserService } from "../../services/UserService";
+import { Link, useNavigation } from "@react-navigation/native";
+import { useTheme } from "@rneui/themed";
 import { styles } from './style';
-import { UserService } from '../../services/UserService';
-import { ScrollView } from 'react-native';
-import { TextInputMask } from 'react-native-masked-text';
-import { handleTextChange, isValidCPF, removeFormatting } from '../../utils/formData.utils';
-import { View } from 'react-native';
+import { ScrollView } from "react-native";
+import { Button, Icon, Input } from "@rneui/base";
+import { TextInputMask } from "react-native-masked-text";
+import { barbershopService } from "../../services/BarbershopService";
+import UserStore from "../../services/Store/UserStore";
+import { barberServicesService } from "../../services/BarberServicesService";
 
 const image = require('../../../assets/background.png');
 
-export default function RegisterClientScreen() {
-
-  const navigation = useNavigation()
+export default function BarbershopRegisterScreen() {
+    const navigation = useNavigation()
   const theme = useTheme();
   const [cpfError, setCpfError] = useState('');
   const [password, setPassword] = useState('');
@@ -24,14 +23,16 @@ export default function RegisterClientScreen() {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [personalZipCode, setPersonalZipCode] = useState('');
+  const [barbershopId, setBarbershopId] = useState('');
+  const [barbershopName, setBarbershopName] = useState('');
 
   const [formData, setFormData] = useState({
+    barbershopId: '',
     email: '',
-    username: '',
     password: '',
-    confirmPass: '',
-    document: '',
+    username: '',
     phoneNumber: '',
+    document: '',
     dateOfBirth: '',
     address: {
       addressStreet: '',
@@ -39,12 +40,13 @@ export default function RegisterClientScreen() {
       addressCity: ''
     }
   });
-  function convertToDate(dateStr:string) {
+
+  function convertToDate(dateStr: string) {
     const parts = dateStr.split('/');
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-    return new Date(year, month, day);
+    const day = parts[0];
+    const month = parts[1];
+    const year = parts[2];
+    return `${year}-${month}-${day}`;
   }
 
   const handleSubmit = async () => {
@@ -52,20 +54,15 @@ export default function RegisterClientScreen() {
       const formattedPhoneNumber = removeFormatting(formData.phoneNumber);
       const formattedDocument = removeFormatting(formData.document);
 
-
-      const response = await UserService.registerUser({
-        address: {
-          ...formData.address
-        },
-        dateOfBirth: convertToDate(formData.dateOfBirth),
-        document: formattedDocument,
-        email: formData.email,
-        password: formData.password,
+      await barberServicesService.registerBarber({
+        ...formData,
+        barbershopId: barbershopId,
         phoneNumber: formattedPhoneNumber,
-        role: 'ROLE_USER',
-        username: formData.username
+        document: formattedDocument,
+        dateOfBirth: convertToDate(formData.dateOfBirth),
       });
-      navigation.navigate('login' as never)
+
+      navigation.navigate('home' as never)
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
     }
@@ -126,7 +123,21 @@ export default function RegisterClientScreen() {
     }));
   };
 
+  const fetchBarbershop = async () => {
+    const userDocument = await UserStore.getDocument() ?? '';
+    const barbershop = await barbershopService.findBarberByOwnerDocument(userDocument);
+    return {barbershopId: barbershop.id, barbershopName: barbershop.tradeName};
+  }
+
   useEffect(() => {
+    const barbershop = async () => {
+      const object = await fetchBarbershop();
+      setBarbershopId(object.barbershopId);
+      setBarbershopName(object.barbershopName);
+    };
+  
+    barbershop();
+    
     navigation.setOptions({
       headerStyle: {
         backgroundColor: 'black'
@@ -139,7 +150,15 @@ export default function RegisterClientScreen() {
     <ImageBackground source={image} resizeMode="cover" style={styles.containerImage}>
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
-          <Text style={styles.title}>Cadastro de Cliente</Text>
+          <Text style={styles.title}>Cadastro de Barbeiro</Text>
+          <Input 
+            value={barbershopName}
+            inputContainerStyle={{...styles.input, backgroundColor: "#d3d3d3"}}
+            containerStyle={{paddingHorizontal: 0}}
+            underlineColorAndroid='transparent'
+            leftIcon={<Icon name='user' type='font-awesome'/>}
+            editable={false}
+          />
           <Input 
             placeholder='Insira seu nome completo'
             inputContainerStyle={styles.input}
@@ -252,16 +271,6 @@ export default function RegisterClientScreen() {
             }}
           />
           <Input
-            placeholder='Endereço'
-            inputContainerStyle={styles.input}
-            containerStyle={{paddingHorizontal: 0}}
-            underlineColorAndroid='transparent'
-            leftIcon={<Icon name='home' />}
-            onChangeText={(value) => setFormData({...formData, address:{
-              ...formData.address, addressStreet: value,             
-            }})}
-          />
-          <Input
             placeholder='Cidade'
             inputContainerStyle={styles.input}
             containerStyle={{paddingHorizontal: 0}}
@@ -269,6 +278,16 @@ export default function RegisterClientScreen() {
             leftIcon={<Icon name='home' />}
             onChangeText={(value) => setFormData({...formData, address:{
               ...formData.address, addressCity: value,             
+            }})}
+          />
+          <Input
+            placeholder='Endereço'
+            inputContainerStyle={styles.input}
+            containerStyle={{paddingHorizontal: 0}}
+            underlineColorAndroid='transparent'
+            leftIcon={<Icon name='home' />}
+            onChangeText={(value) => setFormData({...formData, address:{
+              ...formData.address, addressStreet: value,             
             }})}
           />
         </ScrollView>
@@ -279,9 +298,6 @@ export default function RegisterClientScreen() {
             containerStyle={{ width: '100%', borderRadius: 10 }}
             onPress={handleSubmit}
           />
-          <Text style={styles.text}>
-            Já possui uma conta? <Link style={styles.link} to='/login'>Faça login</Link>
-          </Text>
       </SafeAreaView>
     </ImageBackground>
   )
