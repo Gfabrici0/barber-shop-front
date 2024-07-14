@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styles } from './style';
-import { ImageBackground, Text } from 'react-native';
+import { Alert, ImageBackground, Text } from 'react-native';
 import { 
   Input,
   Icon, 
@@ -10,6 +10,11 @@ import { useTheme } from '@rneui/themed';
 import { Link } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AuthToken from '../../services/Store/AuthToken';
+import UserStore from '../../services/Store/UserStore';
+import Config from 'react-native-config';
+import Constants from 'expo-constants';
 const image = require('../../../assets/background.png');
 
 function LoginScreen() {
@@ -18,7 +23,9 @@ function LoginScreen() {
 
   const theme = useTheme();
 
-  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -27,6 +34,25 @@ function LoginScreen() {
       headerTintColor: 'white', 
     });
   })
+
+  const handleLogin = async () => {
+    try {
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+      const response = await axios.post(`http://192.168.3.16:8080/login`, {
+        email,
+        password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      await UserStore.storeUserData(response.data);
+      await AuthToken.storeToken(response.data.token);
+      navigation.navigate('home' as never);
+    } catch (error) {
+      Alert.alert("Erro de Login", "Verifique suas credenciais e tente novamente.");
+    }
+  };
 
 
   return (
@@ -38,23 +64,28 @@ function LoginScreen() {
           <Input
             placeholder='Email'
             inputContainerStyle={styles.input}
-            containerStyle={{paddingHorizontal: 0}}
+            containerStyle={{ paddingHorizontal: 0 }}
             underlineColorAndroid='transparent'
             leftIcon={<Icon name='email' />}
+            onChangeText={setEmail}
+            value={email}
           />
-          <Input 
+          <Input
             placeholder='Senha'
             inputContainerStyle={styles.input}
-            containerStyle={{paddingHorizontal: 0}}
+            containerStyle={{ paddingHorizontal: 0 }}
             underlineColorAndroid='transparent'
-            leftIcon={<Icon name='key' />}
+            leftIcon={<Icon name='lock' />}
+            secureTextEntry={true}
+            onChangeText={setPassword}
+            value={password}
           />
           <Button
             title={'Entrar'}
             size='md'
             color={theme.theme.colors.secondary}
-            containerStyle={{ width: '100%', borderRadius: 10, marginTop: 10 }}
-            onPress={ () => navigation.navigate('home' as never)}
+            containerStyle={{ width: '100%', borderRadius: 10}}
+            onPress={handleLogin}
           />
           <Text style={styles.text}>
             Esqueceu sua senha? <Link style={styles.link} to={'/forgotPasswordInputEmail'}>Recuperar senha</Link>

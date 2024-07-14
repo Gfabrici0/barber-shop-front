@@ -1,11 +1,13 @@
-import React, { useLayoutEffect, useState, useRef } from 'react';
+import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, useTheme } from '@rneui/themed';
 import { styles } from './style';
 import { Calendar } from 'react-native-calendars';
-import AppointmentCard from '../../components/AppointmentCard';
+import AppointmentSection from '../../components/AppointmentCard';
 import { DropdownMenu } from '../../components/DropdownMenu';
+import UserStore from '../../services/Store/UserStore';
+import { appointmentService } from '../../services/AppointmentService';
 
 function AppoimentScreen() {
 
@@ -22,10 +24,40 @@ function AppoimentScreen() {
     setMenuVisible(!isMenuVisible);
   };
 
+  const [appointment, setAppointment] = useState<any[]>([]);
+
+  const fetchAppointments = async () => {
+    try {
+      const userId = await UserStore.getId() ?? '';
+      const response = await appointmentService.fetchAppointmentByUserId(userId);
+      setAppointment(response.content);
+    } catch (error) {
+      console.error('Erro ao buscar agendamentos:', error);
+    }
+  };
+
   const handleMenuItemPress = (screen: string) => {
     navigation.navigate(screen as never);
     toggleMenu();
   };
+
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAppointments();
+    const fetchName = async () => {
+      try {
+        const name = await UserStore.getName();
+        setName(name);
+      } catch (error) {
+        console.error('Error fetching name:', error);
+      }
+    };
+  
+    fetchName();
+  }, []);
+
+  const updateAppointments = () => fetchAppointments();
 
   const markedDates = appointments.reduce<{ [key: string]: { selected: true, marked: true } }>((acc, appointment) => {
     acc[appointment.date] = { selected: true, marked: true };
@@ -56,7 +88,7 @@ function AppoimentScreen() {
         <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
       )}
         <Text style={[styles.title, {color: theme.theme.colors.primary}]}>
-            Bem vindo, <Text style={{fontWeight: 'bold'}}>Mateus Teixeira</Text>
+            Bem vindo, <Text style={{fontWeight: 'bold'}}>{name}</Text>
         </Text>
         <Text style={[{color: theme.theme.colors.primary}]}>Esta é a sua lista de horários de hoje, dia 10/04/2024</Text>
         <View style={styles.calendarContainer}>
@@ -74,11 +106,9 @@ function AppoimentScreen() {
         </View>
 
         <Text style={[styles.subtitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>
-        <AppointmentCard/>
+        <AppointmentSection refreshAppointments={updateAppointments} appointments={appointment} />
     </SafeAreaView>
   );
 }
-
-
 
 export default AppoimentScreen;

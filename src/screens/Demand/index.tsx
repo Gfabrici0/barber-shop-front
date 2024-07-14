@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { styles } from './style';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import {
@@ -10,12 +10,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import servicesData from './mock/demandData.json';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
+import UserStore from '../../services/Store/UserStore';
+import { barberServicesService } from '../../services/BarberServicesService';
 
 function Demand() {
 
   const navigation = useNavigation();
   const theme = useTheme();
   const [isMenuVisible, setMenuVisible] = useState(false);
+  const [name, setName] = useState<string | null>(null);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -25,6 +28,37 @@ function Demand() {
     navigation.navigate(screen as never);
     toggleMenu();
   };
+
+  const fetchDemandsByBarberId = (id: string) => {
+    return barberServicesService.getAppointmentsByBarberId(id);
+  };
+
+  const fetchDemandsByBarbershopId = (id: string) => {
+    return barberServicesService.getAppointmentsByBarbershopId(id);
+  }
+
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const name = await UserStore.getName();
+        
+        const userRole = await UserStore.getRole();
+        const userId = await UserStore.getId() ?? '';
+
+        if(userRole === 'ROLE_ROLE') {
+          await fetchDemandsByBarberId(userId);
+        } else {
+          await fetchDemandsByBarbershopId(userId);
+        }
+
+        setName(name);
+      } catch (error) {
+        console.error('Error fetching name:', error);
+      }
+    };
+  
+    fetchName();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -50,7 +84,7 @@ function Demand() {
         <DropdownMenu handleMenuItemPress={handleMenuItemPress} />
       )}
         <Text style={styles.welcomeText}>
-            Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{servicesData.profileName}</Text>
+            Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{name}</Text>
         </Text>
         <Text style={styles.description}>
             Esta é a sua lista de pedidos {'\n'}de agendamentos

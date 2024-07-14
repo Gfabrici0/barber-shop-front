@@ -10,6 +10,18 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
   },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+  },
+  passwordView: {    
+    display: 'flex',
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    width: '100%',
+  },
   containerImage: {
     flex: 1,
     justifyContent: 'center',
@@ -28,11 +40,9 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
-    width: '100%',
-    height: 30,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 18
+    paddingVertical: 2,
   },
   link: {
     color: 'white',
