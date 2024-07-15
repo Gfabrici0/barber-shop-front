@@ -147,6 +147,43 @@ export const barberServicesService = {
             console.error("Erro ao buscar barbearias:", error);
             throw error;
         }
+    },
+
+    async registerService(serviceJson: any) {
+        try {
+            console.log(serviceJson);
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
+            const response = await axios.post(`http://192.168.3.16:8080/barbershop/service`, serviceJson, {
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao buscar barbearias:", error);
+            throw error;
+        }
+    },
+
+    async getBarberByUserId(userId: string): Promise<any> {
+        try {
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
+            const response = await axios.get(`http://192.168.3.16:8080/barber/user/${userId}`, {
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao buscar barbearias:", error);
+            throw error;
+        }
     }
 
 }

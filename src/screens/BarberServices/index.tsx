@@ -12,6 +12,7 @@ import { DropdownMenu } from '../../components/DropdownMenu';
 import UserStore from '../../services/Store/UserStore';
 import { barberServicesService } from '../../services/BarberServicesService';
 import EditServiceModal from '../../components/modals/ServiceModal/EditServiceModal';
+import RegisterServiceModal from '../../components/modals/ServiceModal/RegisterServiceModal';
 
 function BarberServices() {
 
@@ -22,6 +23,16 @@ function BarberServices() {
   const [selectedService, setSelectedService] = useState(null);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+
+
+  const openCreateModal = () => {
+    setIsCreateModalVisible(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalVisible(false);
+  };
 
   const openEditModal = (service: any) => {
     setSelectedService(service);
@@ -117,28 +128,50 @@ function BarberServices() {
             Esta é a sua lista de serviços {'\n'}disponibilizados para seus clientes
         </Text>
         <Text style={styles.title}>Lista de Serviços</Text>
+        {/* <ScrollView style={styles.scrollView}>
+          {services.map((service) => (
+              <View key={service.id} style={styles.card}>
+                  <Text style={styles.cardTitle}>{service.serviceName}</Text>
+                  <Text style={styles.cardTitle}>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL'
+                    }).format(service.value)}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Icon name="edit" color={theme.theme.colors.edit} onPress={() => openEditModal(service)} />
+                    <Icon name="delete" color={theme.theme.colors.delete} onPress={() => deleteServie(service.id)} />
+                  </View>
+              </View>
+          ))}
+        </ScrollView> */}
         <ScrollView style={styles.scrollView}>
-        {services.map((service) => (
+          {services.map((service) => (
             <View key={service.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{service.serviceName}</Text>
-                <Text style={styles.cardTitle}>
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle} numberOfLines={1} ellipsizeMode="tail">
+                  {service.serviceName}
+                </Text>
+                <Text style={styles.cardValue}>
                   {new Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                   }).format(service.value)}
                 </Text>
-                <View style={{ flexDirection: 'row' }}>
-                <Icon name="edit" color={theme.theme.colors.edit} onPress={() => openEditModal(service)} />
-                    <Icon name="delete" color={theme.theme.colors.delete} onPress={() => deleteServie(service.id)} />
+                <View style={styles.iconContainer}>
+                  <Icon name="edit" color={theme.theme.colors.edit} onPress={() => openEditModal(service)} />
+                  <Icon name="delete" color={theme.theme.colors.delete} onPress={() => deleteServie(service.id)} />
                 </View>
+              </View>
             </View>
-        ))}
+          ))}
         </ScrollView>
         <Button
           title="Cadastrar novo serviço"
           size="md"
           color={theme.theme.colors.secondary}
           containerStyle={styles.button}
+          onPress={openCreateModal}
         />
         {isEditModalVisible && (
             <EditServiceModal
@@ -146,7 +179,13 @@ function BarberServices() {
               onClose={closeEditModal}
               onUpdate={() => setIsUpdated(true)}
             />
-          )}
+        )}
+        {isCreateModalVisible && (
+          <RegisterServiceModal
+            onClose={closeCreateModal}
+            onUpdate={() => setIsUpdated(true)}
+          />
+        )}
     </SafeAreaView>
   );
 }
