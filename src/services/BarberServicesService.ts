@@ -24,6 +24,24 @@ export const barberServicesService = {
         }
     },
 
+    async updateService(body: any, id: string) {
+        try {
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            /* const response = await axios.post(`${baseUrl}/barber`, data, { */
+            const response = await axios.put(`http://192.168.3.16:8080/barbershop/service/${id}`, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error registering barber:", error);
+            throw error;
+        }
+    },
+
     async getBarberByEmail(): Promise<any> {
         try {
             const token = await AuthToken.getToken();
@@ -77,30 +95,48 @@ export const barberServicesService = {
         }
     },
 
-    async getAppointmentsByBarbershopId(id: string): Promise<any> {
+    async getAppointmentsByUserBarbershopId(userId: string): Promise<any> {
         try {
             const token = await AuthToken.getToken();
             const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
             /* const response = await axios.get(`${baseUrl}/scheduling/barbershop/${id}`, { */
-            const response = await axios.get(`http://192.168.3.16:8080/scheduling/barbershop/${id}`, {
+            const response = await axios.get(`http://192.168.3.16:8080/scheduling/barbershop/${userId}/pending`, {
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
                 }
             });
-            return response.data;
+            return response.data.content;
         } catch (error) {
             console.error("Erro ao buscar barbearias:", error);
             throw error;
         }
     },
 
-    async getAppointmentsByBarberId(id: string): Promise<any> {
+    async getAppointmentsByUserBarberId(userId: string): Promise<any> {
         try {
             const token = await AuthToken.getToken();
             const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
             /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
-            const response = await axios.get(`http://192.168.3.16:8080/scheduling/barber/${id}`, {
+            const response = await axios.get(`http://192.168.3.16:8080/scheduling/barber/${userId}/pending`, {
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data.content;
+        } catch (error) {
+            console.error("Erro ao buscar barbearias:", error);
+            throw error;
+        }
+    },
+
+    async updateDemandStatus(demand: any) {
+        try {
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
+            const response = await axios.put(`http://192.168.3.16:8080/scheduling/${demand.id}/status`, { status: demand.status }, {
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -112,4 +148,5 @@ export const barberServicesService = {
             throw error;
         }
     }
+
 }
