@@ -15,6 +15,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 30
   },
+  serviceInfo: {
+    marginBottom: 4, // Ajuste conforme necessário
+  },
+  serviceValue: {
+    marginBottom: 4, // Ajuste conforme necessário
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Isso distribui os ícones uniformemente
+  },
   welcomeText: {
     color: '#914111',
     fontSize: 20,
@@ -27,18 +37,30 @@ export const styles = StyleSheet.create({
   scrollView: {
     flex: 1
   },
+  cardContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   cardTitle: {
     fontSize: 18,
-    color: '#914111'
+    fontWeight: 'bold',
+    color: '#632D0C',
+    flex: 2,
+    marginRight: 10,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
   },
   card: {
+    flexDirection: 'row',
     backgroundColor: '#fff',
     padding: 20,
     marginVertical: 5,
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -47,6 +69,11 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 3,
+  },
+  cardValue: {
+    fontSize: 18,
+    color: '#632D0C',
+    marginRight: 10,
   },
   title: {
     color: '#914111',

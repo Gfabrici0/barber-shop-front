@@ -11,6 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import UserStore from '../../services/Store/UserStore';
 import { barberServicesService } from '../../services/BarberServicesService';
+import EditServiceModal from '../../components/modals/ServiceModal/EditServiceModal';
+import RegisterServiceModal from '../../components/modals/ServiceModal/RegisterServiceModal';
 
 function BarberServices() {
 
@@ -18,6 +20,28 @@ function BarberServices() {
   const theme = useTheme();
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [name, setName] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+
+
+  const openCreateModal = () => {
+    setIsCreateModalVisible(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalVisible(false);
+  };
+
+  const openEditModal = (service: any) => {
+    setSelectedService(service);
+    setEditModalVisible(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalVisible(false);
+  };
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -56,6 +80,13 @@ function BarberServices() {
   
     fetchName();
   }, []);
+
+  useEffect(() => {
+    if (isUpdated) {
+      fetchServices();
+      setIsUpdated(false);
+    }
+  }, [isUpdated]);
 
   function deleteServie(id: string) {
     try {
@@ -97,24 +128,64 @@ function BarberServices() {
             Esta é a sua lista de serviços {'\n'}disponibilizados para seus clientes
         </Text>
         <Text style={styles.title}>Lista de Serviços</Text>
-        <ScrollView style={styles.scrollView}>
-        {services.map((service) => (
-            <View key={service.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{service.serviceName}</Text>
-                <Text style={styles.cardTitle}>R$ {service.value}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <Icon name="edit" color={theme.theme.colors.edit} onPress={() => console.log('Edit Pressed')} />
+        {/* <ScrollView style={styles.scrollView}>
+          {services.map((service) => (
+              <View key={service.id} style={styles.card}>
+                  <Text style={styles.cardTitle}>{service.serviceName}</Text>
+                  <Text style={styles.cardTitle}>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL'
+                    }).format(service.value)}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Icon name="edit" color={theme.theme.colors.edit} onPress={() => openEditModal(service)} />
                     <Icon name="delete" color={theme.theme.colors.delete} onPress={() => deleteServie(service.id)} />
+                  </View>
+              </View>
+          ))}
+        </ScrollView> */}
+        <ScrollView style={styles.scrollView}>
+          {services.map((service) => (
+            <View key={service.id} style={styles.card}>
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle} numberOfLines={1} ellipsizeMode="tail">
+                  {service.serviceName}
+                </Text>
+                <Text style={styles.cardValue}>
+                  {new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(service.value)}
+                </Text>
+                <View style={styles.iconContainer}>
+                  <Icon name="edit" color={theme.theme.colors.edit} onPress={() => openEditModal(service)} />
+                  <Icon name="delete" color={theme.theme.colors.delete} onPress={() => deleteServie(service.id)} />
                 </View>
+              </View>
             </View>
-        ))}
+          ))}
         </ScrollView>
         <Button
-        title="Cadastrar novo serviço"
-        size="md"
-        color={theme.theme.colors.secondary}
-        containerStyle={styles.button}
+          title="Cadastrar novo serviço"
+          size="md"
+          color={theme.theme.colors.secondary}
+          containerStyle={styles.button}
+          onPress={openCreateModal}
         />
+        {isEditModalVisible && (
+            <EditServiceModal
+              service={selectedService}
+              onClose={closeEditModal}
+              onUpdate={() => setIsUpdated(true)}
+            />
+        )}
+        {isCreateModalVisible && (
+          <RegisterServiceModal
+            onClose={closeCreateModal}
+            onUpdate={() => setIsUpdated(true)}
+          />
+        )}
     </SafeAreaView>
   );
 }
