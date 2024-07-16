@@ -211,27 +211,6 @@ export default function RegisterClientScreen() {
               onChangeText: handlePhoneNumberChange,
             }}
           />
-          <View>
-            <Input
-              secureTextEntry={true}
-              value={password}
-              onChangeText={handlePasswordChange}
-              placeholder="Digite sua senha"
-              leftIcon={<Icon name="lock" color="black" />}
-              containerStyle={{paddingHorizontal: 0}}
-              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
-            />
-            <Input
-              secureTextEntry={true}
-              value={confirmPassword}
-              onChangeText={handleConfirmPasswordChange}
-              placeholder="Confirme sua senha"
-              leftIcon={<Icon name="lock" color="black" />}
-              containerStyle={{paddingHorizontal: 0}}
-              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
-            />
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-          </View>
           <TextInputMask
             type={'custom'}
             options={
@@ -271,6 +250,27 @@ export default function RegisterClientScreen() {
               ...formData.address, addressCity: value,             
             }})}
           />
+                    <View>
+            <Input
+              secureTextEntry={true}
+              value={password}
+              onChangeText={handlePasswordChange}
+              placeholder="Digite sua senha"
+              leftIcon={<Icon name="lock" color="black" />}
+              containerStyle={{paddingHorizontal: 0}}
+              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
+            />
+            <Input
+              secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              placeholder="Confirme sua senha"
+              leftIcon={<Icon name="lock" color="black" />}
+              containerStyle={{paddingHorizontal: 0}}
+              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
+            />
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+          </View>
         </ScrollView>
         <Button
             title={'Cadastrar'}
