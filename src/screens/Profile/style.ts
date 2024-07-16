@@ -7,16 +7,22 @@ export const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 1,
-    borderRadius: 30,
     justifyContent: 'center',
-    height: 50,
-    marginBottom: 10,
-    padding: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
   },
   button: {
     flex: 1,
