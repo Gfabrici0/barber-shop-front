@@ -30,7 +30,9 @@ function AppoimentScreen() {
     try {
       const userId = await UserStore.getId() ?? '';
       const response = await appointmentService.fetchAppointmentByUserId(userId);
-      setAppointment(response.content);
+      setAppointment(response.content.filter(
+        (item: { status: { status: string; }; }) => item.status.status != 'PENDING_BARBER_APPROVAL'
+      ));
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
     }

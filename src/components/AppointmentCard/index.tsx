@@ -100,9 +100,9 @@ const AppointmentSection = ({
             <Text style={styles.cardTitle}>{service.date.slice(11)}</Text>
             <Text style={styles.cardTitle}>{service.user.username}</Text>
             <View style={{ flexDirection: 'row' }}>
-              {userRole != 'ROLE_USER' &&
+              {/* {userRole != 'ROLE_USER' &&
                 <Icon name="edit" color={theme.theme.colors.edit} onPress={handleEditOpen} />
-              }
+              } */}
               {userRole != 'ROLE_USER' &&
                 <Icon name="delete" color={theme.theme.colors.delete} onPress={() => handleDelete(service.id)} />
               }
