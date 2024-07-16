@@ -8,8 +8,8 @@ export const appointmentService = {
         try {
             const token = await AuthToken.getToken();
             const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
-            /* const response = await axios.get(`${baseUrl}/scheduling/user/${userId}`, { */
-            const response = await axios.get(`http://192.168.3.16:8080/scheduling/user/${userId}`, {
+            
+            const response = await axios.get(`${baseUrl}/scheduling/user/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -34,8 +34,8 @@ export const appointmentService = {
                 ...appointmentData,
                 date: appointmentData.date.toISOString().replace('T', ' ').slice(0, 16)
             }
-            /* const response = await axios.post(`${baseUrl}/scheduling`, */
-            const response = await axios.post(`http://192.168.3.16:8080/scheduling`,
+            
+            const response = await axios.post(`${baseUrl}/scheduling`,
                 data
                 ,{
                 headers: {

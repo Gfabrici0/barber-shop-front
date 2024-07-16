@@ -9,8 +9,8 @@ export const barbershopService = {
     try {
       const token = await AuthToken.getToken();      
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
-      /* const response = await axios.get(`${baseUrl}/barbershop`, { */
-      const response = await axios.get(`http://192.168.3.16:8080/barbershop`, {
+      
+      const response = await axios.get(`${baseUrl}/barbershop`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -50,8 +50,7 @@ export const barbershopService = {
       
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       
-      /* const response = await axios.post(`${baseUrl}/barbershop`, data, { */
-      const response = await axios.post(`http://192.168.3.16:8080/barbershop`, data, {
+      const response = await axios.post(`${baseUrl}/barbershop`, data, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -73,7 +72,9 @@ export const barbershopService = {
   async findBarberByOwnerDocument(document: string) : Promise<any> {
     try {
       const token = await AuthToken.getToken();
-      const barbershop = await axios.get(`http://192.168.3.16:8080/barbershop/document/${document}`, {
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+
+      const barbershop = await axios.get(`${baseUrl}/barbershop/document/${document}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
