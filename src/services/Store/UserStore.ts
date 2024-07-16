@@ -11,6 +11,14 @@ class UserStore {
         }
     }
 
+    static async updateUserName(newUsername: string) {
+        const userData = await this.getUserData();
+        if (userData) {
+          userData.username = newUsername;
+          await this.storeUserData(userData);
+        }
+    }
+
     static async getUserData(): Promise<UserData | null> {
         try {
             const jsonData = await SecureStore.getItemAsync('user_data');
