@@ -12,7 +12,7 @@ import { DropdownMenu } from '../../components/DropdownMenu';
 import servicesData from "./mock/demandData.json";
 import ScheduleModal from '../../components/modals/ScheduleModal';
 import { barbershopService } from '../../services/BarbershopService';
-import { Barbershop, Content } from '../../services/interface/barbershop.interface';
+import { Barbers, Barbershop, Content } from '../../services/interface/barbershop.interface';
 import UserStore from '../../services/Store/UserStore';
 
 function Home() {
@@ -22,6 +22,7 @@ function Home() {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isScheduleModalVisible, setScheduleModalVisible] = useState(false);
   const [selectedBarberShopId, setSelectedBarberShopId] = useState<string>();
+  const [barbers, setBarbers] = useState<Barbers[]>([]);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -33,15 +34,46 @@ function Home() {
   const fetchBarbershops = async (currentText: string) => {
     try {
       const response = await barbershopService.listBarbershops();
+      console.log('resposta: ',response.content ?? [])
       setBarbershops(response.content ?? []);
     } catch (error) {
       console.error('Erro ao buscar barbearias:', error);
     }
   };
 
+  const fetchBarbershopByName = async (name: string) => {
+      try {
+        setSelectedBarberShopId("")
+        const response = await barbershopService.findBarbershopByName(name);
+        if (response) {
+          setBarbershops(response);
+        } else {
+          setBarbershops([]);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar barbearia pelo nome:', error);
+      }
+  };
+
+
+  const fetchBarbersFromBarbershop = async (barbershopId?: string) => {
+    try {
+      const response = await barbershopService.getBarbersFromBarbershop(barbershopId);
+      console.log('barberirosss: ',response.barbers ?? [])
+      setBarbers(response?.barbers ?? []);
+    } catch (error) {
+      console.error('Erro ao buscar barbeiros da barbearia:', error);
+    }
+  }
+
+
   useEffect(() => {
     fetchBarbershops(searchBarbershops);
-  }, [searchBarbershops]);
+    if(selectedBarberShopId) {
+      console.log('selectedBarberShopId:', selectedBarberShopId);
+      fetchBarbersFromBarbershop(selectedBarberShopId);
+    }
+  }, [searchBarbershops, selectedBarberShopId]);
 
   const handleMenuItemPress = (screen: string) => {
     navigation.navigate(screen as never);
@@ -57,7 +89,10 @@ function Home() {
   };
 
   const [name, setName] = useState<string | null>(null);
+
+  const [userRole, setUserRole] = useState<any>();
         
+  console.log('barberirossss: ', barbers);
   useEffect(() => {
     const fetchName = async () => {
       try {
@@ -67,7 +102,17 @@ function Home() {
         console.error('Error fetching name:', error);
       }
     };
-  
+
+    const fetchRole = async () => {
+      try {
+        const role = await UserStore.getRole();
+
+        setUserRole(role);
+      } catch (error) {
+        console.error('Error fetching role:', error);
+      }
+    }
+    fetchRole();
     fetchName();
   }, []);
 
@@ -89,6 +134,8 @@ function Home() {
     });
   }, [navigation, isMenuVisible]);
 
+  console.log('barbers:', barbers);
+  console.log('selectedBarberSHo:', selectedBarberShopId);
   return (
     <SafeAreaView style={styles.container}>
       {isMenuVisible && (
@@ -98,13 +145,22 @@ function Home() {
           Bem Vindo, <Text style={{fontWeight: 'bold', color: '#632D0C'}}>{name}</Text>
         </Text>
         <Text style={styles.description}>Buscar barbearia</Text>
-        <View style={[styles.inputContainer, { borderColor: theme.theme.colors.secondary }]}>
+        <View>
+        <View style={[styles.searchContainer, { borderColor: theme.theme.colors.secondary }]}>
           <TextInput
-            style={{ color: theme.theme.colors.secondary,borderColor: theme.theme.colors.secondary }}
-            placeholderTextColor={theme.theme.colors.secondary}
-            onEndEditing={(e) => setSearchBarbershops(e.nativeEvent.text)}
+            style={styles.input}
+            placeholderTextColor="#999"
+            onChangeText={(text) => setSearchBarbershops(text)}
+            placeholder="Digite o nome da barbearia"
           />
-        </View>
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => fetchBarbershopByName(searchBarbershops)}
+          >
+            <Icon name="search" size={20} color="#914111" />
+          </TouchableOpacity>
+      </View>
+      </View>
         <Text style={styles.description}>Resultados Encontrados:</Text>
         <ScrollView style={styles.scrollView}>
           {
@@ -115,19 +171,24 @@ function Home() {
             ))
           }
         </ScrollView>
-        <Button
-          title="Agendar" 
-          size="md"
-          color={theme.theme.colors.secondary}
-          containerStyle={styles.button}
-          onPress={toggleScheduleModal}
-        />
         {
-          selectedBarberShopId && (
+          userRole === 'ROLE_USER' && (
+            <Button
+              title="Agendar"
+              size="md"
+              color={theme.theme.colors.secondary}
+              containerStyle={styles.button}
+              onPress={handleSchedule}
+            />
+          )
+        }
+        {
+          selectedBarberShopId && isScheduleModalVisible && (
             <ScheduleModal
               visible={isScheduleModalVisible}
               onCancel={toggleScheduleModal}
               barberShopId={selectedBarberShopId}
+              barbers={barbers}
             />
           )
         }

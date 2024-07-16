@@ -59,7 +59,8 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     backgroundColor: "#fff",
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    maxHeight: 50,
   },
   buttonContainer: {
     flexDirection: 'row',

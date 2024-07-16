@@ -21,3 +21,19 @@ export interface Barbershop {
     first: boolean;
     empty: boolean;
 }
+
+export interface Barbers {
+    id: string;
+    username: string;
+    dateOfBirth: string;
+    document: string;
+    email: string;
+}
+
+
+export interface BarbersService {
+    id: string;
+    serviceName: string;
+    value: number;
+    description: string;
+}

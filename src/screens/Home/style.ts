@@ -10,6 +10,25 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 60,
+    borderWidth: 1,
+    borderColor: '#DDD',
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
+  },
+  searchButton: {
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+  },
   containerImage: {
     flex: 1,
     alignItems: 'center',

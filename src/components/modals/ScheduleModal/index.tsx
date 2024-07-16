@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { styles } from "./style";
 import { Picker } from "@react-native-picker/picker";
@@ -6,45 +6,33 @@ import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 import { appointmentService } from '../../../services/AppointmentService'
 import UserStore from "../../../services/Store/UserStore";
+import { Barbers, BarbersService } from "../../../services/interface/barbershop.interface";
+import { barberServicesService } from "../../../services/BarberServicesService";
 
 interface ScheduleModalProps {
   visible: boolean;
   onCancel: () => void;
   barberShopId: string;
+  barbers: Barbers[];
 }
 
 const ScheduleModal = ({
   barberShopId,
   visible,
   onCancel,
+  barbers
 }: ScheduleModalProps) => {
   const [selectedBarber, setSelectedBarber] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [services, setServices] = useState<BarbersService[]>([]);
 
   const theme = useTheme();
 
-  const barbers = [
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Mateus Teixeira" },
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro B" },
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro C" },
-  ];
-  const services = [
-    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Americano - R$ 25,00" },
-    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Clássico - R$ 30,00" },
-  ];
-
-  const dates = [
-    { id: 1, label: "10/05/2024", value: "2024-05-10" },
-    { id: 2, label: "11/05/2024", value: "2024-05-11" },
-    { id: 3, label: "12/05/2024", value: "2024-05-12" },
-    { id: 4, label: "13/05/2024", value: "2024-05-13" },
-  ];
-
   const generateHours = () => {
     const hours = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 9; i <= 18; i++) {
       const formattedHour = i < 10 ? `0${i}:00` : `${i}:00`;
       hours.push(formattedHour);
     }
@@ -64,9 +52,46 @@ const ScheduleModal = ({
       serviceId: selectedService,
       userId,
     }
+
+    console.log('newAppointment:', newAppointment);
     await appointmentService.createAppointment(newAppointment)
     onCancel();
   }
+
+  const fetchServicesByBarber = async (barberId: string) => {
+    try {
+      const response = await barberServicesService.listServices(barberId);
+      setServices(response.content ?? []);
+      console.log('response:', response);
+    } catch (error) {
+      console.error('Erro ao buscar serviços:', error);
+    }
+  }
+
+  const generateDates = () => {
+    const dates = [];
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const futureDate = new Date(today);
+      futureDate.setDate(today.getDate() + i);
+      const formattedDate = futureDate.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+      const isoDate = futureDate.toISOString().split('T')[0];
+      dates.push({ id: i, label: formattedDate, value: isoDate });
+    }
+    return dates;
+  };
+  
+  const dates = generateDates();
+
+  useEffect(() => {
+    if(selectedBarber){
+      fetchServicesByBarber(selectedBarber);
+    }
+  }, [selectedBarber])
 
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
@@ -104,7 +129,7 @@ const ScheduleModal = ({
                       {barbers.map((barber) => (
                         <Picker.Item
                           key={barber.id}
-                          label={barber.name}
+                          label={barber.username}
                           value={barber.id}
                         />
                       ))}
@@ -124,8 +149,7 @@ const ScheduleModal = ({
                       {services.map((service) => (
                         <Picker.Item
                           key={service.id}
-                          label={service.name}
-                          style={{backgroundColor: theme.theme.colors.secondary}}
+                          label={service.serviceName}
                           value={service.id}
                         />
                       ))}
