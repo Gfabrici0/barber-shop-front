@@ -23,7 +23,7 @@ export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (sc
   return (
     <View style={[styles.dropdownMenu, { backgroundColor: theme.theme.colors.secondary }]}>
       {
-        userRole === 'ROLE_BARBER' &&
+        (userRole === 'ROLE_BARBER' || userRole === 'ROLE_USER') &&
         <TouchableOpacity onPress={() => handleMenuItemPress('appoiment')}>
           <Text style={styles.menuItem}>Agendamentos</Text>
         </TouchableOpacity>

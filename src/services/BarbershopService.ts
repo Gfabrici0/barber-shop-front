@@ -10,7 +10,7 @@ export const barbershopService = {
       const token = await AuthToken.getToken();      
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       
-      const response = await axios.get(`${baseUrl}/barbershop`, {
+      const response = await axios.get(name?`${baseUrl}/barbershop/find/${name}` :`${baseUrl}/barbershop`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

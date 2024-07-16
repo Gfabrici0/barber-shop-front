@@ -33,7 +33,7 @@ function Home() {
 
   const fetchBarbershops = async (currentText: string) => {
     try {
-      const response = await barbershopService.listBarbershops();
+      const response = await barbershopService.listBarbershops(currentText);
       console.log('resposta: ',response.content ?? [])
       setBarbershops(response.content ?? []);
     } catch (error) {
