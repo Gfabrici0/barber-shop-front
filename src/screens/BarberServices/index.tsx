@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { DropdownMenu } from '../../components/DropdownMenu';
 import UserStore from '../../services/Store/UserStore';
-import { barberServicesService } from '../../services/BarberServicesService';
+import { barberServicesService } from '../../services/BarberServices';
 import EditServiceModal from '../../components/modals/ServiceModal/EditServiceModal';
 import RegisterServiceModal from '../../components/modals/ServiceModal/RegisterServiceModal';
 

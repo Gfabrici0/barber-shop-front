@@ -10,13 +10,30 @@ export const barbershopService = {
       const token = await AuthToken.getToken();      
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       /* const response = await axios.get(`${baseUrl}/barbershop`, { */
-      const response = await axios.get(`http://192.168.3.16:8080/barbershop`, {
+      const response = await axios.get(`http://192.168.15.7:8080/barbershop`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
       return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar barbearias:", error);
+      throw error;
+    }
+  },
+  async listBarberByBarbershop(barbershopId: string)  {
+    try {
+      const token = await AuthToken.getToken();      
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+      /* const response = await axios.get(`${baseUrl}/barbershop`, { */
+      const response = await axios.get(`http://192.168.15.7:8080/barbershop/barbers/${barbershopId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data.barbers;
     } catch (error) {
       console.error("Erro ao buscar barbearias:", error);
       throw error;
@@ -51,7 +68,7 @@ export const barbershopService = {
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       
       /* const response = await axios.post(`${baseUrl}/barbershop`, data, { */
-      const response = await axios.post(`http://192.168.3.16:8080/barbershop`, data, {
+      const response = await axios.post(`http://192.168.15.7:8080/barbershop`, data, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -73,7 +90,7 @@ export const barbershopService = {
   async findBarberByOwnerDocument(document: string) : Promise<any> {
     try {
       const token = await AuthToken.getToken();
-      const barbershop = await axios.get(`http://192.168.3.16:8080/barbershop/document/${document}`, {
+      const barbershop = await axios.get(`http://192.168.15.7:8080/barbershop/document/${document}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

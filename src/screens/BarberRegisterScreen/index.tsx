@@ -10,7 +10,7 @@ import { Button, Icon, Input } from "@rneui/base";
 import { TextInputMask } from "react-native-masked-text";
 import { barbershopService } from "../../services/BarbershopService";
 import UserStore from "../../services/Store/UserStore";
-import { barberServicesService } from "../../services/BarberServicesService";
+import { barberServicesService } from "../../services/BarberServices";
 
 const image = require('../../../assets/background.png');
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { styles } from "./style";
 import { Picker } from "@react-native-picker/picker";
@@ -6,6 +6,8 @@ import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 import { appointmentService } from '../../../services/AppointmentService'
 import UserStore from "../../../services/Store/UserStore";
+import { barbershopService } from "../../../services/BarbershopService";
+import { barberServicesService } from "../../../services/BarberServices";
 
 interface ScheduleModalProps {
   visible: boolean;
@@ -23,24 +25,42 @@ const ScheduleModal = ({
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
+  const [barbers, setBarbers] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
+  const [availabilities, setAvailabilities] = useState<any[]>([]);
+
+  useEffect(() => {
+    barbershopService.listBarberByBarbershop(barberShopId).then(
+      (data) => setBarbers(data)
+    )
+  }, [setBarbers]);
+
+  useEffect(() => {
+    if(selectedBarber && selectedBarber.length)
+      barberServicesService.getBarberServices(selectedBarber).then(
+        (data) => setServices(data)
+      )
+  }, [setBarbers, selectedBarber]);
+
+  useEffect(
+    () => {
+      if(selectedBarber && selectedBarber.length)
+        barberServicesService.getBarberAvailabilities(selectedBarber).then(
+          (data) => setAvailabilities(data)
+        );
+    }, [selectedBarber, setAvailabilities]
+  )
+
   const theme = useTheme();
 
-  const barbers = [
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Mateus Teixeira" },
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro B" },
-    { id: '3f2df1e2-49ff-4a51-a248-1fa03ac28a20', name: "Barbeiro C" },
-  ];
-  const services = [
-    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Americano - R$ 25,00" },
-    { id: 'b4065f89-00c8-4518-bb3b-29c10d93791d', name: "Corte Clássico - R$ 30,00" },
-  ];
+  // const dates = [
+  //   { id: 1, label: "10/05/2024", value: "2024-05-10" },
+  //   { id: 2, label: "11/05/2024", value: "2024-05-11" },
+  //   { id: 3, label: "12/05/2024", value: "2024-05-12" },
+  //   { id: 4, label: "13/05/2024", value: "2024-05-13" },
+  // ];
 
-  const dates = [
-    { id: 1, label: "10/05/2024", value: "2024-05-10" },
-    { id: 2, label: "11/05/2024", value: "2024-05-11" },
-    { id: 3, label: "12/05/2024", value: "2024-05-12" },
-    { id: 4, label: "13/05/2024", value: "2024-05-13" },
-  ];
+  const hours = (availabilities?.find(availability => availability.day == selectedDate)?.hours) ?? []
 
   const generateHours = () => {
     const hours = [];
@@ -51,12 +71,19 @@ const ScheduleModal = ({
     return hours;
   };
 
-  const hours = generateHours();
+  const cleanUp = () => {
+    setSelectedBarber("");
+    setSelectedService("");
+    setSelectedDate("");
+    setSelectedTime("");
+  }
+
+  // const hours = generateHours();
 
   const handleSubmit = async () => {
     const userId = await UserStore.getId() || '';
-    const date = new Date(selectedDate);
-    date.setHours(Number(selectedTime.slice(0, 2)));
+    //get date offset
+    const date = new Date(new Date(selectedTime).getTime() - (new Date().getTimezoneOffset() * 60000));
     const newAppointment = {
       barberId: selectedBarber,
       barbershopId: barberShopId,
@@ -65,8 +92,12 @@ const ScheduleModal = ({
       userId,
     }
     await appointmentService.createAppointment(newAppointment)
+    cleanUp();
     onCancel();
   }
+
+  console.log('barber availabilities', availabilities)
+
 
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
@@ -101,10 +132,10 @@ const ScheduleModal = ({
                       mode="dropdown"
                     >
                       <Picker.Item label="Selecione um barbeiro" value="" />
-                      {barbers.map((barber) => (
+                      {(barbers??[]).map((barber) => (
                         <Picker.Item
                           key={barber.id}
-                          label={barber.name}
+                          label={barber.username}
                           value={barber.id}
                         />
                       ))}
@@ -124,7 +155,7 @@ const ScheduleModal = ({
                       {services.map((service) => (
                         <Picker.Item
                           key={service.id}
-                          label={service.name}
+                          label={service.serviceName}
                           style={{backgroundColor: theme.theme.colors.secondary}}
                           value={service.id}
                         />
@@ -143,11 +174,11 @@ const ScheduleModal = ({
                         mode="dropdown"
                       >
                         <Picker.Item label="Selecione um dia" value="" />
-                        {dates.map((day) => (
+                        {availabilities.map((day) => (
                           <Picker.Item
-                            key={day.id}
-                            label={day.label}
-                            value={day.value}
+                            key={day.day}
+                            label={day.day}
+                            value={day.day}
                           />
                         ))}
                       </Picker>
@@ -163,7 +194,7 @@ const ScheduleModal = ({
                         mode="dropdown"
                       >
                         <Picker.Item label="Selecione uma hora" value="" />
-                        {hours.map((hour, index) => (
+                        {hours.map((hour :any, index:number) => (
                           <Picker.Item key={index} label={hour} value={hour} />
                         ))}
                       </Picker>
@@ -178,7 +209,10 @@ const ScheduleModal = ({
                   title="Cancelar"
                   buttonStyle={styles.buttonCancel}
                   titleStyle={styles.buttonCancelText}
-                  onPress={onCancel}
+                  onPress={() => {
+                    cleanUp();
+                    onCancel();
+                  }}
                 />
                 <Button
                   title="Agendar"

@@ -25,7 +25,7 @@ export const UserService = {
     const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
     try {
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.post(`http://192.168.3.16:8080/user`, fixedData);
+      const response = await axios.post(`http://192.168.15.7:8080/user`, fixedData);
       return response.data;
     } catch (exc: any) {
       console.error('Error details:', {
@@ -40,7 +40,7 @@ export const UserService = {
     try {
       const token = await AuthToken.getToken();
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.get(`http://192.168.3.16:8080/user/${userId}`, {
+      const response = await axios.get(`http://192.168.15.7:8080/user/${userId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -61,7 +61,7 @@ export const UserService = {
     try {
       const token = await AuthToken.getToken();
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.put(`http://192.168.3.16:8080/user/${userId}`, formData, {
+      const response = await axios.put(`http://192.168.15.7:8080/user/${userId}`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

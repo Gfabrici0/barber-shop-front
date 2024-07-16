@@ -4,7 +4,7 @@ import { Modal, TouchableOpacity, View, Text, TextInput } from "react-native";
 import { styles } from "./style";
 import { Icon, Button } from "@rneui/base";
 import { TextInputMask } from 'react-native-masked-text';
-import { barberServicesService } from "../../../../services/BarberServicesService";
+import { barberServicesService } from "../../../../services/BarberServices";
 
 interface ServiceModalProps {
     service: any;
