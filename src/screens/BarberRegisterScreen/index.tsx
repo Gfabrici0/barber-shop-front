@@ -25,6 +25,7 @@ export default function BarbershopRegisterScreen() {
   const [personalZipCode, setPersonalZipCode] = useState('');
   const [barbershopId, setBarbershopId] = useState('');
   const [barbershopName, setBarbershopName] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
 
   const [formData, setFormData] = useState({
     barbershopId: '',
@@ -50,6 +51,11 @@ export default function BarbershopRegisterScreen() {
   }
 
   const handleSubmit = async () => {
+    if (cpfError || passwordError || dateOfBirthError) {
+      alert("Por favor, corrija os erros no formulário antes de prosseguir.");
+      return; 
+    }
+
     try {
       const formattedPhoneNumber = removeFormatting(formData.phoneNumber);
       const formattedDocument = removeFormatting(formData.document);
@@ -117,10 +123,19 @@ export default function BarbershopRegisterScreen() {
   });
 
   const handleDateChange = (formattedDate: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      dateOfBirth: formattedDate
-    }));
+    const selectedDate = convertToDate(formattedDate);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); 
+  
+    if (new Date(selectedDate) > currentDate) {
+      setDateOfBirthError('A data de nascimento não pode ser maior que a data atual.');
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        dateOfBirth: formattedDate
+      }));
+      setDateOfBirthError('');
+    }
   };
 
   const fetchBarbershop = async () => {
@@ -209,6 +224,7 @@ export default function BarbershopRegisterScreen() {
             }}
             onChangeText={handleDateChange}
           />
+          {dateOfBirthError ? <Text style={{ color: 'red', marginLeft: 10 }}>{dateOfBirthError}</Text> : null}
           <TextInputMask
             placeholder='Celular - (99) 99999-9999'
             type={'cel-phone'}
@@ -230,27 +246,6 @@ export default function BarbershopRegisterScreen() {
               onChangeText: handlePhoneNumberChange,
             }}
           />
-          <View>
-            <Input
-              secureTextEntry={true}
-              value={password}
-              onChangeText={handlePasswordChange}
-              placeholder="Digite sua senha"
-              leftIcon={<Icon name="lock" color="black" />}
-              containerStyle={{paddingHorizontal: 0}}
-              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
-            />
-            <Input
-              secureTextEntry={true}
-              value={confirmPassword}
-              onChangeText={handleConfirmPasswordChange}
-              placeholder="Confirme sua senha"
-              leftIcon={<Icon name="lock" color="black" />}
-              containerStyle={{paddingHorizontal: 0}}
-              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
-            />
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-          </View>
           <TextInputMask
             type={'custom'}
             options={
@@ -290,6 +285,27 @@ export default function BarbershopRegisterScreen() {
               ...formData.address, addressStreet: value,             
             }})}
           />
+          <View>
+            <Input
+              secureTextEntry={true}
+              value={password}
+              onChangeText={handlePasswordChange}
+              placeholder="Digite sua senha"
+              leftIcon={<Icon name="lock" color="black" />}
+              containerStyle={{paddingHorizontal: 0}}
+              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
+            />
+            <Input
+              secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              placeholder="Confirme sua senha"
+              leftIcon={<Icon name="lock" color="black" />}
+              containerStyle={{paddingHorizontal: 0}}
+              inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
+            />
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+          </View>
         </ScrollView>
         <Button
             title={'Cadastrar'}

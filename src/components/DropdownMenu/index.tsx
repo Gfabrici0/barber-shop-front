@@ -3,6 +3,7 @@ import { useTheme } from "@rneui/themed";
 import { styles } from "./styles";
 import UserStore from "../../services/Store/UserStore";
 import { useEffect, useState } from "react";
+import React from "react";
 
 export function DropdownMenu({ handleMenuItemPress }: { handleMenuItemPress: (screen: string) => void }) {
   const theme = useTheme();

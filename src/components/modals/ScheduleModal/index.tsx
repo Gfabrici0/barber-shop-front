@@ -6,41 +6,38 @@ import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 import { appointmentService } from '../../../services/AppointmentService'
 import UserStore from "../../../services/Store/UserStore";
-import { barbershopService } from "../../../services/BarbershopService";
+import { Barbers, BarbersService } from "../../../services/interface/barbershop.interface";
 import { barberServicesService } from "../../../services/BarberServices";
+import { barbershopService } from '../../../services/BarbershopService'
 
 interface ScheduleModalProps {
   visible: boolean;
   onCancel: () => void;
   barberShopId: string;
+  barbers: Barbers[];
 }
 
 const ScheduleModal = ({
   barberShopId,
   visible,
   onCancel,
+  barbers:_barbers
 }: ScheduleModalProps) => {
   const [selectedBarber, setSelectedBarber] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [services, setServices] = useState<BarbersService[]>([]);
 
-  const [barbers, setBarbers] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
   const [availabilities, setAvailabilities] = useState<any[]>([]);
-
-  useEffect(() => {
-    barbershopService.listBarberByBarbershop(barberShopId).then(
-      (data) => setBarbers(data)
-    )
-  }, [setBarbers]);
+  const [barbers, setBarbers] = useState<any[]>([]);
 
   useEffect(() => {
     if(selectedBarber && selectedBarber.length)
       barberServicesService.getBarberServices(selectedBarber).then(
         (data) => setServices(data)
       )
-  }, [setBarbers, selectedBarber]);
+  }, [selectedBarber]);
 
   useEffect(
     () => {
@@ -51,20 +48,21 @@ const ScheduleModal = ({
     }, [selectedBarber, setAvailabilities]
   )
 
+  useEffect(() => {
+    console.log('getting barbers')
+    barbershopService.getBarbersFromBarbershop(barberShopId).then(
+      (data) => {
+        console.log('data', data);
+        setBarbers(data.barbers)
+      }
+    )
+  }, [setBarbers]);
+
   const theme = useTheme();
-
-  // const dates = [
-  //   { id: 1, label: "10/05/2024", value: "2024-05-10" },
-  //   { id: 2, label: "11/05/2024", value: "2024-05-11" },
-  //   { id: 3, label: "12/05/2024", value: "2024-05-12" },
-  //   { id: 4, label: "13/05/2024", value: "2024-05-13" },
-  // ];
-
-  const hours = (availabilities?.find(availability => availability.day == selectedDate)?.hours) ?? []
 
   const generateHours = () => {
     const hours = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 9; i <= 18; i++) {
       const formattedHour = i < 10 ? `0${i}:00` : `${i}:00`;
       hours.push(formattedHour);
     }
@@ -77,6 +75,8 @@ const ScheduleModal = ({
     setSelectedDate("");
     setSelectedTime("");
   }
+
+  const hours = (availabilities?.find(availability => availability.day == selectedDate)?.hours) ?? []
 
   // const hours = generateHours();
 
@@ -91,6 +91,8 @@ const ScheduleModal = ({
       serviceId: selectedService,
       userId,
     }
+
+    console.log('newAppointment:', newAppointment);
     await appointmentService.createAppointment(newAppointment)
     cleanUp();
     onCancel();

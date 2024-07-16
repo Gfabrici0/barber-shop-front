@@ -25,7 +25,7 @@ export const UserService = {
     const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
     try {
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.post(`http://192.168.15.7:8080/user`, fixedData);
+      const response = await axios.post(`${baseUrl}/user`, fixedData);
       return response.data;
     } catch (exc: any) {
       console.error('Error details:', {
@@ -39,8 +39,9 @@ export const UserService = {
   async getUserById(userId: string): Promise<any> {
     try {
       const token = await AuthToken.getToken();
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.get(`http://192.168.15.7:8080/user/${userId}`, {
+      const response = await axios.get(`${baseUrl}/user/${userId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -60,8 +61,9 @@ export const UserService = {
   async updateUser(formData: any, userId: string) {
     try {
       const token = await AuthToken.getToken();
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */
-      const response = await axios.put(`http://192.168.15.7:8080/user/${userId}`, formData, {
+      const response = await axios.put(`${baseUrl}/user/${userId}`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

@@ -23,6 +23,7 @@ export default function RegisterBarberShopScreen() {
   const [passwordError, setPasswordError] = useState('');
   const [barbershopZipCode, setBarbershopZipCode] = useState('');
   const [personalZipCode, setPersonalZipCode] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
   
   const handlePasswordChange = (value: string) => {
     setPassword(value);
@@ -90,6 +91,11 @@ export default function RegisterBarberShopScreen() {
       document: removeFormatting(formData.document),
       phoneNumber: removeFormatting(formData.phoneNumber)
     };
+
+    if (cnpjError || passwordError || dateOfBirthError) {
+      alert("Por favor, corrija os erros no formulário antes de prosseguir.");
+      return; 
+    }
   
     try {
       await barbershopService.createBarbershop(data);
@@ -140,10 +146,19 @@ export default function RegisterBarberShopScreen() {
   });
 
   const handleDateChange = (formattedDate: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      dateOfBirth: formattedDate
-    }));
+    const selectedDate = convertToDate(formattedDate);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); 
+  
+    if (selectedDate > currentDate) {
+      setDateOfBirthError('A data de nascimento não pode ser maior que a data atual.');
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        dateOfBirth: formattedDate
+      }));
+      setDateOfBirthError('');
+    }
   };
 
   return (
@@ -238,27 +253,7 @@ export default function RegisterBarberShopScreen() {
               }}
               onChangeText={handleDateChange}
             />
-            <View>
-              <Input
-                secureTextEntry={true}
-                value={password}
-                onChangeText={handlePasswordChange}
-                placeholder="Digite sua senha"
-                leftIcon={<Icon name="lock" color="black" />}
-                containerStyle={{paddingHorizontal: 0}}
-                inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
-              />
-              <Input
-                secureTextEntry={true}
-                value={confirmPassword}
-                onChangeText={handleConfirmPasswordChange}
-                placeholder="Confirme sua senha"
-                leftIcon={<Icon name="lock" color="black" />}
-                containerStyle={{paddingHorizontal: 0}}
-                inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
-              />
-              {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-            </View>
+            {dateOfBirthError ? <Text style={{ color: 'red', marginLeft: 10 }}>{dateOfBirthError}</Text> : null}
             <Input
               placeholder='Cidade da barbearia'
               inputContainerStyle={styles.input}
@@ -329,6 +324,27 @@ export default function RegisterBarberShopScreen() {
                 leftIcon: <Icon name='home' />,
               }}
             />
+                        <View>
+              <Input
+                secureTextEntry={true}
+                value={password}
+                onChangeText={handlePasswordChange}
+                placeholder="Digite sua senha"
+                leftIcon={<Icon name="lock" color="black" />}
+                containerStyle={{paddingHorizontal: 0}}
+                inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}                
+              />
+              <Input
+                secureTextEntry={true}
+                value={confirmPassword}
+                onChangeText={handleConfirmPasswordChange}
+                placeholder="Confirme sua senha"
+                leftIcon={<Icon name="lock" color="black" />}
+                containerStyle={{paddingHorizontal: 0}}
+                inputContainerStyle={{...styles.input, borderColor: isPasswordValid ? 'black' : 'red'}}            
+              />
+              {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            </View>
           </ScrollView>
             <Button
               title={'Cadastrar'}

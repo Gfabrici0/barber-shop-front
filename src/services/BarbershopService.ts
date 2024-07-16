@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Barbershop } from "./interface/barbershop.interface";
+import { Barbershop, Content } from "./interface/barbershop.interface";
 import AuthToken from "./Store/AuthToken";
 import Constants from 'expo-constants';
 import { Alert } from "react-native";
@@ -9,8 +9,8 @@ export const barbershopService = {
     try {
       const token = await AuthToken.getToken();      
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
-      /* const response = await axios.get(`${baseUrl}/barbershop`, { */
-      const response = await axios.get(`http://192.168.15.7:8080/barbershop`, {
+      
+      const response = await axios.get(`${baseUrl}/barbershop`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -22,23 +22,26 @@ export const barbershopService = {
       throw error;
     }
   },
-  async listBarberByBarbershop(barbershopId: string)  {
+
+  async getBarbersFromBarbershop(barbershopId?: string): Promise<any> {
+    
     try {
-      const token = await AuthToken.getToken();      
+      const token = await AuthToken.getToken();
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
-      /* const response = await axios.get(`${baseUrl}/barbershop`, { */
-      const response = await axios.get(`http://192.168.15.7:8080/barbershop/barbers/${barbershopId}`, {
+      /* const response = await axios.get(`${baseUrl}/barbershop/${barbershopId}/barbers`, { */
+      const response = await axios.get(`${baseUrl}/barbershop/barbers/${barbershopId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-      return response.data.barbers;
+      return response.data;
     } catch (error) {
-      console.error("Erro ao buscar barbearias:", error);
+      console.error("Erro ao buscar barbeiros da barbearia:", error);
       throw error;
     }
   },
+
   async createBarbershop(barbershopData:{
     ownerName: string,
     tradeName: string,
@@ -67,8 +70,7 @@ export const barbershopService = {
       
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
       
-      /* const response = await axios.post(`${baseUrl}/barbershop`, data, { */
-      const response = await axios.post(`http://192.168.15.7:8080/barbershop`, data, {
+      const response = await axios.post(`${baseUrl}/barbershop`, data, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -90,7 +92,9 @@ export const barbershopService = {
   async findBarberByOwnerDocument(document: string) : Promise<any> {
     try {
       const token = await AuthToken.getToken();
-      const barbershop = await axios.get(`http://192.168.15.7:8080/barbershop/document/${document}`, {
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+
+      const barbershop = await axios.get(`${baseUrl}/barbershop/document/${document}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -107,5 +111,37 @@ export const barbershopService = {
       Alert.alert("Erro ao buscar barbearia", err.message);
       throw err;
     }
-  }
+  },
+
+  async findBarbershopByName(name: string) : Promise<Content[]> {
+    try {
+      const token = await AuthToken.getToken();
+      const response = await axios.get(`http://192.168.1.10:8080/barbershop/find/${name}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const barbershops: Content[] = response.data.map((barbershop: any): Content => ({
+        id: barbershop.id,
+        ownerName: barbershop.ownerName,
+        corporateName: barbershop.corporateName,
+        tradeName: barbershop.tradeName,
+        document: barbershop.document,
+        email: barbershop.email,
+        addresses: barbershop.addresses,
+      }));
+      return barbershops;
+    } catch (err: any) {
+      console.error('Error details:', {
+        message: err.message,
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        responseData: err.response?.data,
+      });
+      Alert.alert("Erro ao buscar barbearia", err.message);
+      throw err;
+    }
+  },
+
 }
