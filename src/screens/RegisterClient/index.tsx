@@ -24,6 +24,7 @@ export default function RegisterClientScreen() {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [personalZipCode, setPersonalZipCode] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
 
   const [formData, setFormData] = useState({
     email: '',
@@ -48,6 +49,11 @@ export default function RegisterClientScreen() {
   }
 
   const handleSubmit = async () => {
+    if (cpfError || passwordError || dateOfBirthError) {
+      alert("Por favor, corrija os erros no formulário antes de prosseguir.");
+      return; 
+    }
+
     try {
       const formattedPhoneNumber = removeFormatting(formData.phoneNumber);
       const formattedDocument = removeFormatting(formData.document);
@@ -120,10 +126,19 @@ export default function RegisterClientScreen() {
   });
 
   const handleDateChange = (formattedDate: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      dateOfBirth: formattedDate
-    }));
+    const selectedDate = convertToDate(formattedDate);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); 
+  
+    if (selectedDate > currentDate) {
+      setDateOfBirthError('A data de nascimento não pode ser maior que a data atual.');
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        dateOfBirth: formattedDate
+      }));
+      setDateOfBirthError('');
+    }
   };
 
   useEffect(() => {
@@ -190,6 +205,7 @@ export default function RegisterClientScreen() {
             }}
             onChangeText={handleDateChange}
           />
+          {dateOfBirthError ? <Text style={{ color: 'red', marginLeft: 10 }}>{dateOfBirthError}</Text> : null}
           <TextInputMask
             placeholder='Celular - (99) 99999-9999'
             type={'cel-phone'}
@@ -250,7 +266,7 @@ export default function RegisterClientScreen() {
               ...formData.address, addressCity: value,             
             }})}
           />
-                    <View>
+          <View>
             <Input
               secureTextEntry={true}
               value={password}
