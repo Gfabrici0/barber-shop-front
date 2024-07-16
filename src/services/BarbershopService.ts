@@ -116,12 +116,15 @@ export const barbershopService = {
   async findBarbershopByName(name: string) : Promise<Content[]> {
     try {
       const token = await AuthToken.getToken();
-      const response = await axios.get(`http://192.168.1.10:8080/barbershop/find/${name}`, {
+      const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+      
+      const response = await axios.get(`${baseUrl}/barbershop/find/${name}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
+      
       const barbershops: Content[] = response.data.map((barbershop: any): Content => ({
         id: barbershop.id,
         ownerName: barbershop.ownerName,
