@@ -18,7 +18,7 @@
       "supportsTablet": true
     },
     "extra": {
-      "BASE_URL": "http://192.168.3.16:8080"
+      "BASE_URL": "http://192.168.15.7:8080"
     },
     "android": {
       "adaptiveIcon": {

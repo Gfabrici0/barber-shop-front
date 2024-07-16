@@ -184,6 +184,44 @@ export const barberServicesService = {
             console.error("Erro ao buscar barbearias:", error);
             throw error;
         }
-    }
+    },
 
+    async getBarberServices(barberId: string): Promise<any> {
+        try {
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
+            const response = await axios.get(`http://192.168.15.7:8080/barber/service/barber/${barberId}`, {
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+            return response.data.content;
+        } catch (error) {
+            console.error("Erro ao buscar barbearias:", error);
+            throw error;
+        }
+    },
+
+    async getBarberAvailabilities(barberId: string): Promise<any> {
+        try {
+            const token = await AuthToken.getToken();
+            const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+            console.log('bearer token', token);
+            /* const response = await axios.get(`${baseUrl}/scheduling/barber/${id}`, { */
+            const response = await axios.get(`http://192.168.15.7:8080/barber/${barberId}/availability`, {
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+            return response.data.availabilities;
+        } catch (error) {
+            console.error("Erro ao buscar barbearias:", error);
+            throw error;
+        }
+    }
 }

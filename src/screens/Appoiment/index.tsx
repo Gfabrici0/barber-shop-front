@@ -30,7 +30,9 @@ function AppoimentScreen() {
     try {
       const userId = await UserStore.getId() ?? '';
       const response = await appointmentService.fetchAppointmentByUserId(userId);
-      setAppointment(response.content);
+      setAppointment(response.content.filter(
+        (item: { status: { status: string; }; }) => item.status.status != 'PENDING_BARBER_APPROVAL'
+      ));
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
     }
@@ -92,7 +94,7 @@ function AppoimentScreen() {
         </Text>
         <Text style={[{color: theme.theme.colors.primary}]}>Esta é a sua lista de horários de hoje, dia 10/04/2024</Text>
         <View style={styles.calendarContainer}>
-          <Calendar 
+          {/* <Calendar 
             markedDates={markedDates} 
             theme={{
               selectedDayBackgroundColor: theme.theme.colors.primary,
@@ -102,7 +104,7 @@ function AppoimentScreen() {
               dayTextColor: theme.theme.colors.primary,
               agendaDayTextColor: theme.theme.colors.primary,
             }}  
-          />
+          /> */}
         </View>
 
         <Text style={[styles.subtitle, {color: theme.theme.colors.secondary}]}>Próximos Horários</Text>

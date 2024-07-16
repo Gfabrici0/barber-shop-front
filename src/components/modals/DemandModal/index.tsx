@@ -3,7 +3,7 @@ import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./style";
 import { Icon, Button } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
-import { barberServicesService } from "../../../services/BarberServicesService";
+import { barberServicesService } from "../../../services/BarberServices";
 
 interface DemandModalProps {
   demand: any;

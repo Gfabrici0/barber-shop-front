@@ -7,7 +7,8 @@ import { useTheme } from "@rneui/themed";
 import { appointmentService } from '../../../services/AppointmentService'
 import UserStore from "../../../services/Store/UserStore";
 import { Barbers, BarbersService } from "../../../services/interface/barbershop.interface";
-import { barberServicesService } from "../../../services/BarberServicesService";
+import { barberServicesService } from "../../../services/BarberServices";
+import { barbershopService } from '../../../services/BarbershopService'
 
 interface ScheduleModalProps {
   visible: boolean;
@@ -20,13 +21,42 @@ const ScheduleModal = ({
   barberShopId,
   visible,
   onCancel,
-  barbers
+  barbers:_barbers
 }: ScheduleModalProps) => {
   const [selectedBarber, setSelectedBarber] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [services, setServices] = useState<BarbersService[]>([]);
+
+  const [availabilities, setAvailabilities] = useState<any[]>([]);
+  const [barbers, setBarbers] = useState<any[]>([]);
+
+  useEffect(() => {
+    if(selectedBarber && selectedBarber.length)
+      barberServicesService.getBarberServices(selectedBarber).then(
+        (data) => setServices(data)
+      )
+  }, [selectedBarber]);
+
+  useEffect(
+    () => {
+      if(selectedBarber && selectedBarber.length)
+        barberServicesService.getBarberAvailabilities(selectedBarber).then(
+          (data) => setAvailabilities(data)
+        );
+    }, [selectedBarber, setAvailabilities]
+  )
+
+  useEffect(() => {
+    console.log('getting barbers')
+    barbershopService.getBarbersFromBarbershop(barberShopId).then(
+      (data) => {
+        console.log('data', data);
+        setBarbers(data.barbers)
+      }
+    )
+  }, [setBarbers]);
 
   const theme = useTheme();
 
@@ -39,12 +69,21 @@ const ScheduleModal = ({
     return hours;
   };
 
-  const hours = generateHours();
+  const cleanUp = () => {
+    setSelectedBarber("");
+    setSelectedService("");
+    setSelectedDate("");
+    setSelectedTime("");
+  }
+
+  const hours = (availabilities?.find(availability => availability.day == selectedDate)?.hours) ?? []
+
+  // const hours = generateHours();
 
   const handleSubmit = async () => {
     const userId = await UserStore.getId() || '';
-    const date = new Date(selectedDate);
-    date.setHours(Number(selectedTime.slice(0, 2)));
+    //get date offset
+    const date = new Date(new Date(selectedTime).getTime() - (new Date().getTimezoneOffset() * 60000));
     const newAppointment = {
       barberId: selectedBarber,
       barbershopId: barberShopId,
@@ -55,43 +94,12 @@ const ScheduleModal = ({
 
     console.log('newAppointment:', newAppointment);
     await appointmentService.createAppointment(newAppointment)
+    cleanUp();
     onCancel();
   }
 
-  const fetchServicesByBarber = async (barberId: string) => {
-    try {
-      const response = await barberServicesService.listServices(barberId);
-      setServices(response.content ?? []);
-      console.log('response:', response);
-    } catch (error) {
-      console.error('Erro ao buscar serviços:', error);
-    }
-  }
+  console.log('barber availabilities', availabilities)
 
-  const generateDates = () => {
-    const dates = [];
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const futureDate = new Date(today);
-      futureDate.setDate(today.getDate() + i);
-      const formattedDate = futureDate.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      });
-      const isoDate = futureDate.toISOString().split('T')[0];
-      dates.push({ id: i, label: formattedDate, value: isoDate });
-    }
-    return dates;
-  };
-  
-  const dates = generateDates();
-
-  useEffect(() => {
-    if(selectedBarber){
-      fetchServicesByBarber(selectedBarber);
-    }
-  }, [selectedBarber])
 
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
@@ -126,7 +134,7 @@ const ScheduleModal = ({
                       mode="dropdown"
                     >
                       <Picker.Item label="Selecione um barbeiro" value="" />
-                      {barbers.map((barber) => (
+                      {(barbers??[]).map((barber) => (
                         <Picker.Item
                           key={barber.id}
                           label={barber.username}
@@ -150,6 +158,7 @@ const ScheduleModal = ({
                         <Picker.Item
                           key={service.id}
                           label={service.serviceName}
+                          style={{backgroundColor: theme.theme.colors.secondary}}
                           value={service.id}
                         />
                       ))}
@@ -167,11 +176,11 @@ const ScheduleModal = ({
                         mode="dropdown"
                       >
                         <Picker.Item label="Selecione um dia" value="" />
-                        {dates.map((day) => (
+                        {availabilities.map((day) => (
                           <Picker.Item
-                            key={day.id}
-                            label={day.label}
-                            value={day.value}
+                            key={day.day}
+                            label={day.day}
+                            value={day.day}
                           />
                         ))}
                       </Picker>
@@ -187,7 +196,7 @@ const ScheduleModal = ({
                         mode="dropdown"
                       >
                         <Picker.Item label="Selecione uma hora" value="" />
-                        {hours.map((hour, index) => (
+                        {hours.map((hour :any, index:number) => (
                           <Picker.Item key={index} label={hour} value={hour} />
                         ))}
                       </Picker>
@@ -202,7 +211,10 @@ const ScheduleModal = ({
                   title="Cancelar"
                   buttonStyle={styles.buttonCancel}
                   titleStyle={styles.buttonCancelText}
-                  onPress={onCancel}
+                  onPress={() => {
+                    cleanUp();
+                    onCancel();
+                  }}
                 />
                 <Button
                   title="Agendar"

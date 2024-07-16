@@ -38,6 +38,7 @@ function LoginScreen() {
   const handleLogin = async () => {
     try {
       const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
+      console.log('calling base url', baseUrl);
       const response = await axios.post(`${baseUrl}/login`, {
         email,
         password
