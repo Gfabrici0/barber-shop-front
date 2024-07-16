@@ -21,7 +21,7 @@ export const UserService = {
         ...userData,
         dateOfBirth: userData.dateOfBirth.toISOString().slice(0, 10)
     };
-    
+
     const baseUrl = Constants.expoConfig?.extra?.BASE_URL;
     try {
       /* const response = await axios.post(`${baseUrl}/user`, fixedData); */

@@ -44,7 +44,9 @@ function Home() {
   const fetchBarbershopByName = async (name: string) => {
       try {
         setSelectedBarberShopId("")
+        
         const response = await barbershopService.findBarbershopByName(name);
+        
         if (response) {
           setBarbershops(response);
         } else {
@@ -59,7 +61,7 @@ function Home() {
   const fetchBarbersFromBarbershop = async (barbershopId?: string) => {
     try {
       const response = await barbershopService.getBarbersFromBarbershop(barbershopId);
-      console.log('barberirosss: ',response.barbers ?? [])
+      
       setBarbers(response?.barbers ?? []);
     } catch (error) {
       console.error('Erro ao buscar barbeiros da barbearia:', error);
@@ -70,7 +72,7 @@ function Home() {
   useEffect(() => {
     fetchBarbershops(searchBarbershops);
     if(selectedBarberShopId) {
-      console.log('selectedBarberShopId:', selectedBarberShopId);
+      
       fetchBarbersFromBarbershop(selectedBarberShopId);
     }
   }, [searchBarbershops, selectedBarberShopId]);
@@ -92,7 +94,6 @@ function Home() {
 
   const [userRole, setUserRole] = useState<any>();
         
-  console.log('barberirossss: ', barbers);
   useEffect(() => {
     const fetchName = async () => {
       try {
@@ -134,8 +135,6 @@ function Home() {
     });
   }, [navigation, isMenuVisible]);
 
-  console.log('barbers:', barbers);
-  console.log('selectedBarberSHo:', selectedBarberShopId);
   return (
     <SafeAreaView style={styles.container}>
       {isMenuVisible && (
